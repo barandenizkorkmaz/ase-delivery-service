@@ -1,6 +1,6 @@
 package com.ase.ase_box.data.dto;
 
-import com.ase.ase_box.data.enums.BoxStatus;
+import com.ase.ase_box.data.enums.DeliveryStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,10 +10,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 @NoArgsConstructor
-public class BoxDto {
+public class DeliveryDto {
+    private String boxId;
+    private String delivererId;
+    private String userId;
     private String id;
-    private String name;
-    private String raspberryId;
-    private String address;
-    private BoxStatus status;
+    private DeliveryStatus deliveryState;
 }
