@@ -1,4 +1,4 @@
-package com.ase.ase_box.service;
+package com.ase.ase_box.service.box;
 
 import com.ase.ase_box.data.entity.Box;
 import com.ase.ase_box.repository.BoxRepository;

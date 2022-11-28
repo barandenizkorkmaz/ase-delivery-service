@@ -1,4 +1,4 @@
-package com.ase.ase_box.data.request;
+package com.ase.ase_box.data.request.box;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

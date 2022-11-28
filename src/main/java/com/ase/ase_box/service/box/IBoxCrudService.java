@@ -1,8 +1,8 @@
-package com.ase.ase_box.service;
+package com.ase.ase_box.service.box;
 
 import com.ase.ase_box.data.dto.BoxDto;
-import com.ase.ase_box.data.request.AddBoxRequest;
-import com.ase.ase_box.data.request.UpdateBoxRequest;
+import com.ase.ase_box.data.request.box.AddBoxRequest;
+import com.ase.ase_box.data.request.box.UpdateBoxRequest;
 
 import java.util.List;
 

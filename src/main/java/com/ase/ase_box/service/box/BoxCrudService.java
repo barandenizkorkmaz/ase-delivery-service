@@ -1,10 +1,12 @@
-package com.ase.ase_box.service;
+package com.ase.ase_box.service.box;
 
 import com.ase.ase_box.data.dto.BoxDto;
 import com.ase.ase_box.data.entity.Box;
-import com.ase.ase_box.data.entity.BoxStatus;
-import com.ase.ase_box.data.request.AddBoxRequest;
-import com.ase.ase_box.data.request.UpdateBoxRequest;
+import com.ase.ase_box.data.enums.BoxStatus;
+import com.ase.ase_box.data.request.box.AddBoxRequest;
+import com.ase.ase_box.data.request.delivery.AddDeliveryToBoxStatusRequest;
+import com.ase.ase_box.data.request.box.UpdateBoxRequest;
+import com.ase.ase_box.data.response.AddDeliveryToBoxStatusResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -28,10 +30,23 @@ public class BoxCrudService implements IBoxCrudService {
         return BOX_MAPPER.convertToBoxDtoList(boxEntityService.getAllBoxes());
     }
 
+    public AddDeliveryToBoxStatusResponse addDeliveryToBoxStatus(AddDeliveryToBoxStatusRequest addDeliveryToBoxStatusRequest){
+        Box box = boxEntityService.getBoxById(addDeliveryToBoxStatusRequest.getBoxId())
+                .orElseThrow(IllegalArgumentException::new);
+        if (box.getStatus() == BoxStatus.FULL && !box.getUserId().equals(addDeliveryToBoxStatusRequest.getUserId())){
+            return AddDeliveryToBoxStatusResponse.builder()
+                    .boxStatus(BoxStatus.REJECTED)
+                    .build();
+        }
+        return AddDeliveryToBoxStatusResponse.builder()
+                .boxStatus(BoxStatus.EMPTY)
+                .build();
+    }
+
     public BoxDto getBoxById(String boxId) {
         return BOX_MAPPER.convertToBoxDto(
                 boxEntityService.getBoxById(boxId)
-                        .orElseThrow(() -> new IllegalArgumentException())
+                        .orElseThrow(IllegalArgumentException::new)
         );
     }
 
@@ -41,7 +56,7 @@ public class BoxCrudService implements IBoxCrudService {
 
     public BoxDto updateBox(String boxId, UpdateBoxRequest updateBoxRequest) {
         Box box = boxEntityService.getBoxById(boxId)
-                .orElseThrow(() -> new IllegalArgumentException());
+                .orElseThrow(IllegalArgumentException::new);
         BOX_MAPPER.updateBox(box, updateBoxRequest);
         return BOX_MAPPER.convertToBoxDto(boxEntityService.updateBox(box));
     }

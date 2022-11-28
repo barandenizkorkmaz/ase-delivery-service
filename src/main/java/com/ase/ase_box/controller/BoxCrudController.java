@@ -1,9 +1,9 @@
 package com.ase.ase_box.controller;
 
 import com.ase.ase_box.data.dto.BoxDto;
-import com.ase.ase_box.data.request.AddBoxRequest;
-import com.ase.ase_box.data.request.UpdateBoxRequest;
-import com.ase.ase_box.service.IBoxCrudService;
+import com.ase.ase_box.data.request.box.AddBoxRequest;
+import com.ase.ase_box.data.request.box.UpdateBoxRequest;
+import com.ase.ase_box.service.box.IBoxCrudService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
