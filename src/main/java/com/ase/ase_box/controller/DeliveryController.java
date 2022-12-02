@@ -1,6 +1,7 @@
 package com.ase.ase_box.controller;
 
 import com.ase.ase_box.data.dto.DeliveryDto;
+import com.ase.ase_box.data.entity.Delivery;
 import com.ase.ase_box.data.request.delivery.AddDeliveryRequest;
 import com.ase.ase_box.data.response.AddDeliveryResponse;
 import com.ase.ase_box.service.delivery.DeliveryEntityService;
@@ -24,4 +25,5 @@ public class DeliveryController {
     public ResponseEntity<DeliveryDto> getDelivery(@RequestParam("id") String id){
         return ResponseEntity.ok(deliveryEntityService.getDelivery(id));
     }
+
 }

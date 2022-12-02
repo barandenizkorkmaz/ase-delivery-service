@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class AddDeliveryToBoxStatusResponse {
+public class BoxStatusResponse {
 
     private BoxStatus boxStatus;
 }

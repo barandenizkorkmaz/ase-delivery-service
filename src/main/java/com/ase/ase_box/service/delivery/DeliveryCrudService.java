@@ -1,9 +1,11 @@
 package com.ase.ase_box.service.delivery;
 
+import com.ase.ase_box.data.dto.DeliveryDto;
 import com.ase.ase_box.data.entity.Delivery;
 import com.ase.ase_box.data.enums.DeliveryStatus;
 import com.ase.ase_box.data.request.delivery.AddDeliveryRequest;
 import com.ase.ase_box.data.request.delivery.CheckDeliveryIsExistRequest;
+import com.ase.ase_box.data.request.delivery.FinishDeliveryRequest;
 import com.ase.ase_box.repository.DeliveryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -29,10 +31,23 @@ public class DeliveryCrudService implements IDeliveryCrudService{
 
     @Override
     public Delivery checkDeliveryIsExist(CheckDeliveryIsExistRequest checkDeliveryIsExistRequest) {
-        return deliveryRepository.findByDelivererIdAndAndBoxIdAndDeliveryState(
+        return deliveryRepository.findByDelivererIdAndBoxIdAndUserIdAndDeliveryState(
                 checkDeliveryIsExistRequest.getDelivererId(),
                 checkDeliveryIsExistRequest.getBoxId(),
+                checkDeliveryIsExistRequest.getUserId(),
                 DeliveryStatus.SHIPPING.name()
         ).orElseThrow(IllegalArgumentException::new);
+    }
+
+    @Override
+    public Delivery finishDelivery(FinishDeliveryRequest finishDeliveryRequest) {
+        Delivery delivery = deliveryRepository.findByDelivererIdAndBoxIdAndUserIdAndDeliveryState(
+                finishDeliveryRequest.getDelivererId(),
+                finishDeliveryRequest.getBoxId(),
+                finishDeliveryRequest.getUserId(),
+                DeliveryStatus.SHIPPING.name()
+        ).orElseThrow(IllegalArgumentException::new);
+        delivery.setDeliveryState(DeliveryStatus.DELIVERED);
+        return deliveryRepository.save(delivery);
     }
 }
