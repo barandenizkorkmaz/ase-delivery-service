@@ -6,7 +6,8 @@ import com.ase.ase_box.data.enums.BoxStatus;
 import com.ase.ase_box.data.request.box.AddBoxRequest;
 import com.ase.ase_box.data.request.delivery.AddDeliveryToBoxStatusRequest;
 import com.ase.ase_box.data.request.box.UpdateBoxRequest;
-import com.ase.ase_box.data.response.AddDeliveryToBoxStatusResponse;
+import com.ase.ase_box.data.request.delivery.TakeDeliveryFromBoxRequest;
+import com.ase.ase_box.data.response.BoxStatusResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -30,15 +31,32 @@ public class BoxCrudService implements IBoxCrudService {
         return BOX_MAPPER.convertToBoxDtoList(boxEntityService.getAllBoxes());
     }
 
-    public AddDeliveryToBoxStatusResponse addDeliveryToBoxStatus(AddDeliveryToBoxStatusRequest addDeliveryToBoxStatusRequest){
+    public BoxStatusResponse addDeliveryToBoxStatus(AddDeliveryToBoxStatusRequest addDeliveryToBoxStatusRequest){
         Box box = boxEntityService.getBoxById(addDeliveryToBoxStatusRequest.getBoxId())
                 .orElseThrow(IllegalArgumentException::new);
         if (box.getStatus() == BoxStatus.FULL && !box.getUserId().equals(addDeliveryToBoxStatusRequest.getUserId())){
-            return AddDeliveryToBoxStatusResponse.builder()
+            return BoxStatusResponse.builder()
                     .boxStatus(BoxStatus.REJECTED)
                     .build();
         }
-        return AddDeliveryToBoxStatusResponse.builder()
+        box.setStatus(BoxStatus.FULL);
+        boxEntityService.updateBox(box);
+        return BoxStatusResponse.builder()
+                .boxStatus(BoxStatus.FULL)
+                .build();
+    }
+
+    public BoxStatusResponse takeDeliveryFromBox(TakeDeliveryFromBoxRequest takeDeliveryFromBoxRequest){
+        Box box = boxEntityService.getBoxById(takeDeliveryFromBoxRequest.getBoxId())
+                .orElseThrow(IllegalArgumentException::new);
+        if (box.getStatus() == BoxStatus.EMPTY && !box.getUserId().equals(takeDeliveryFromBoxRequest.getUserId())){
+            return BoxStatusResponse.builder()
+                    .boxStatus(BoxStatus.REJECTED)
+                    .build();
+        }
+        box.setStatus(BoxStatus.EMPTY);
+        boxEntityService.updateBox(box);
+        return BoxStatusResponse.builder()
                 .boxStatus(BoxStatus.EMPTY)
                 .build();
     }
