@@ -31,7 +31,7 @@ public class DeliveryCrudService implements IDeliveryCrudService{
 
     @Override
     public Delivery checkDeliveryIsExist(CheckDeliveryIsExistRequest checkDeliveryIsExistRequest) {
-        return deliveryRepository.findByDelivererIdAndAndBoxIdAndUserIdAndDeliveryState(
+        return deliveryRepository.findByDelivererIdAndBoxIdAndUserIdAndDeliveryState(
                 checkDeliveryIsExistRequest.getDelivererId(),
                 checkDeliveryIsExistRequest.getBoxId(),
                 checkDeliveryIsExistRequest.getUserId(),
@@ -41,7 +41,7 @@ public class DeliveryCrudService implements IDeliveryCrudService{
 
     @Override
     public Delivery finishDelivery(FinishDeliveryRequest finishDeliveryRequest) {
-        Delivery delivery = deliveryRepository.findByDelivererIdAndAndBoxIdAndUserIdAndDeliveryState(
+        Delivery delivery = deliveryRepository.findByDelivererIdAndBoxIdAndUserIdAndDeliveryState(
                 finishDeliveryRequest.getDelivererId(),
                 finishDeliveryRequest.getBoxId(),
                 finishDeliveryRequest.getUserId(),
