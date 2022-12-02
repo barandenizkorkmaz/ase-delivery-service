@@ -25,7 +25,7 @@ public class BoxController {
         return ResponseEntity.ok(boxCrudService.createBox(addBoxRequest));
     }
 
-    @PostMapping("boxes")
+    @PostMapping("all")
     public ResponseEntity<List<BoxDto>> getAllBoxes() {
         return ResponseEntity.ok(boxCrudService.getAllBoxes());
     }

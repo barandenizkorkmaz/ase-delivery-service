@@ -2,12 +2,16 @@ package com.ase.ase_box.service.box;
 
 import com.ase.ase_box.data.dto.BoxDto;
 import com.ase.ase_box.data.entity.Box;
+import com.ase.ase_box.data.entity.Delivery;
 import com.ase.ase_box.data.enums.BoxStatus;
 import com.ase.ase_box.data.request.box.AddBoxRequest;
 import com.ase.ase_box.data.request.delivery.AddDeliveryToBoxStatusRequest;
 import com.ase.ase_box.data.request.box.UpdateBoxRequest;
+import com.ase.ase_box.data.request.delivery.CheckDeliveryIsExistRequest;
+import com.ase.ase_box.data.request.delivery.FinishDeliveryRequest;
 import com.ase.ase_box.data.request.delivery.TakeDeliveryFromBoxRequest;
 import com.ase.ase_box.data.response.BoxStatusResponse;
+import com.ase.ase_box.service.delivery.IDeliveryCrudService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +24,7 @@ import static com.ase.ase_box.data.mapper.BoxMapper.BOX_MAPPER;
 public class BoxCrudService implements IBoxCrudService {
 
     private final IBoxEntityService boxEntityService;
+    private final IDeliveryCrudService deliveryCrudService;
 
     public BoxDto createBox(AddBoxRequest addBoxRequest) {
         Box box = BOX_MAPPER.createBox(addBoxRequest);
@@ -34,13 +39,29 @@ public class BoxCrudService implements IBoxCrudService {
     public BoxStatusResponse addDeliveryToBoxStatus(AddDeliveryToBoxStatusRequest addDeliveryToBoxStatusRequest){
         Box box = boxEntityService.getBoxById(addDeliveryToBoxStatusRequest.getBoxId())
                 .orElseThrow(IllegalArgumentException::new);
-        if (box.getStatus() == BoxStatus.FULL && !box.getUserId().equals(addDeliveryToBoxStatusRequest.getUserId())){
+        Delivery delivery = deliveryCrudService.checkDeliveryIsExist(
+                CheckDeliveryIsExistRequest.builder()
+                        .boxId(addDeliveryToBoxStatusRequest.getBoxId())
+                        .delivererId(addDeliveryToBoxStatusRequest.getDelivererId())
+                        .userId(addDeliveryToBoxStatusRequest.getUserId())
+                        .build()
+        );
+        if (box.getStatus() == BoxStatus.FULL &&
+                !box.getUserId().equals(addDeliveryToBoxStatusRequest.getUserId()) &&
+                delivery != null){
             return BoxStatusResponse.builder()
                     .boxStatus(BoxStatus.REJECTED)
                     .build();
         }
         box.setStatus(BoxStatus.FULL);
         boxEntityService.updateBox(box);
+        deliveryCrudService.finishDelivery(
+                FinishDeliveryRequest.builder()
+                        .delivererId(addDeliveryToBoxStatusRequest.getDelivererId())
+                        .boxId(addDeliveryToBoxStatusRequest.getBoxId())
+                        .userId(addDeliveryToBoxStatusRequest.getUserId())
+                        .build()
+        );
         return BoxStatusResponse.builder()
                 .boxStatus(BoxStatus.FULL)
                 .build();

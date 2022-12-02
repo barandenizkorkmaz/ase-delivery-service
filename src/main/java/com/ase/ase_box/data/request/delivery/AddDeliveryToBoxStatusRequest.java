@@ -12,5 +12,6 @@ import lombok.NoArgsConstructor;
 public class AddDeliveryToBoxStatusRequest {
 
     private String userId;
+    private String delivererId;
     private String boxId;
 }
