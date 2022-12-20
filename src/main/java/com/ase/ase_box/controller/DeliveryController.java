@@ -1,11 +1,11 @@
 package com.ase.ase_box.controller;
 
 import com.ase.ase_box.data.dto.DeliveryDto;
-import com.ase.ase_box.data.entity.Delivery;
 import com.ase.ase_box.data.request.delivery.AddDeliveryRequest;
 import com.ase.ase_box.data.response.AddDeliveryResponse;
 import com.ase.ase_box.service.delivery.DeliveryEntityService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,13 +17,19 @@ public class DeliveryController {
     private final DeliveryEntityService deliveryEntityService;
 
     @PostMapping("")
-    public ResponseEntity<AddDeliveryResponse> addDelivery(@RequestBody AddDeliveryRequest addDeliveryRequest){
+    public ResponseEntity<AddDeliveryResponse> addDelivery(@RequestBody AddDeliveryRequest addDeliveryRequest) {
         return ResponseEntity.ok(deliveryEntityService.createDelivery(addDeliveryRequest));
     }
 
     @PostMapping("/{id}")
-    public ResponseEntity<DeliveryDto> getDelivery(@RequestParam("id") String id){
+    public ResponseEntity<DeliveryDto> getDelivery(@RequestParam("id") String id) {
         return ResponseEntity.ok(deliveryEntityService.getDelivery(id));
+    }
+
+    @PostMapping("delete/{id}")
+    public ResponseEntity<HttpStatus> deleteDeliveryById(@PathVariable("id") String id) {
+        deliveryEntityService.deleteDeliveryById(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 }

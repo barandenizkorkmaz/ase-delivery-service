@@ -1,6 +1,5 @@
 package com.ase.ase_box.service.delivery;
 
-import com.ase.ase_box.data.dto.DeliveryDto;
 import com.ase.ase_box.data.entity.Delivery;
 import com.ase.ase_box.data.enums.DeliveryStatus;
 import com.ase.ase_box.data.request.delivery.AddDeliveryRequest;
@@ -14,7 +13,7 @@ import static com.ase.ase_box.data.mapper.DeliveryMapper.DELIVERY_MAPPER;
 
 @Service
 @RequiredArgsConstructor
-public class DeliveryCrudService implements IDeliveryCrudService{
+public class DeliveryCrudService implements IDeliveryCrudService {
 
     private final DeliveryRepository deliveryRepository;
 
@@ -49,5 +48,10 @@ public class DeliveryCrudService implements IDeliveryCrudService{
         ).orElseThrow(IllegalArgumentException::new);
         delivery.setDeliveryState(DeliveryStatus.DELIVERED);
         return deliveryRepository.save(delivery);
+    }
+
+    @Override
+    public void deleteDeliveryById(String deliveryId) {
+        deliveryRepository.deleteById(deliveryId);
     }
 }

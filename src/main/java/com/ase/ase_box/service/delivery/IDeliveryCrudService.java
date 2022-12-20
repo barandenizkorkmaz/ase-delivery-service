@@ -15,5 +15,7 @@ public interface IDeliveryCrudService {
 
     Delivery finishDelivery(FinishDeliveryRequest finishDeliveryRequest);
 
-    // TODO: 18.11.2022 Update - Delete delivery should be added.
+    void deleteDeliveryById(String deliveryId);
+
+
 }

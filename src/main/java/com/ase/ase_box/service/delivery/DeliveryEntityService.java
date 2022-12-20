@@ -12,7 +12,7 @@ import static com.ase.ase_box.data.mapper.DeliveryMapper.DELIVERY_MAPPER;
 
 @Service
 @RequiredArgsConstructor
-public class DeliveryEntityService implements IDeliveryEntityService{
+public class DeliveryEntityService implements IDeliveryEntityService {
 
     private final DeliveryCrudService deliveryCrudService;
 
@@ -30,7 +30,7 @@ public class DeliveryEntityService implements IDeliveryEntityService{
                     .deliveryDto(DELIVERY_MAPPER.convertToDeliveryDto(delivery))
                     .isSuccessful(false)
                     .build();
-        }catch (Exception e){
+        } catch (Exception e) {
             Delivery delivery = deliveryCrudService.saveDelivery(addDeliveryRequest);
             return AddDeliveryResponse.
                     builder()
@@ -43,5 +43,10 @@ public class DeliveryEntityService implements IDeliveryEntityService{
     @Override
     public DeliveryDto getDelivery(String deliveryId) {
         return DELIVERY_MAPPER.convertToDeliveryDto(deliveryCrudService.getDelivery(deliveryId));
+    }
+
+    @Override
+    public void deleteDeliveryById(String deliveryId) {
+        deliveryCrudService.deleteDeliveryById(deliveryId);
     }
 }

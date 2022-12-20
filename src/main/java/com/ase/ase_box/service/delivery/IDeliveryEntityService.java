@@ -9,4 +9,6 @@ public interface IDeliveryEntityService {
     AddDeliveryResponse createDelivery(AddDeliveryRequest addDeliveryRequest);
 
     DeliveryDto getDelivery(String deliveryId);
+
+    void deleteDeliveryById(String deliveryId);
 }
