@@ -1,4 +1,4 @@
-package com.ase.ase_box.data.response;
+package com.ase.ase_box.data.response.delivery;
 
 import com.ase.ase_box.data.dto.DeliveryDto;
 import lombok.AllArgsConstructor;
@@ -10,8 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AddDeliveryResponse {
-
+public class UpdateDeliveryResponse {
     DeliveryDto deliveryDto;
     boolean isSuccessful;
 }

@@ -31,5 +31,5 @@ public class Delivery extends BaseEntity{
     private String userId;
 
     @Enumerated(EnumType.STRING)
-    private DeliveryStatus deliveryState = DeliveryStatus.SHIPPING;
+    private DeliveryStatus deliveryStatus = DeliveryStatus.DISPATCHED;
 }

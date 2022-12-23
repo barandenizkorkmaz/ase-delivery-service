@@ -6,6 +6,7 @@ import com.ase.ase_box.data.enums.DeliveryStatus;
 import com.ase.ase_box.data.request.delivery.AddDeliveryRequest;
 import com.ase.ase_box.data.request.delivery.CheckDeliveryIsExistRequest;
 import com.ase.ase_box.data.request.delivery.FinishDeliveryRequest;
+import com.ase.ase_box.data.request.delivery.UpdateDeliveryRequest;
 import com.ase.ase_box.repository.DeliveryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,14 +25,24 @@ public class DeliveryCrudService implements IDeliveryCrudService{
     }
 
     @Override
+    public Delivery updateDelivery(UpdateDeliveryRequest updateDeliveryRequest) {
+        return deliveryRepository.save(DELIVERY_MAPPER.createDelivery(updateDeliveryRequest));
+    }
+
+    @Override
     public Delivery getDelivery(String deliveryId) {
         return deliveryRepository.findById(deliveryId)
                 .orElseThrow(IllegalAccessError::new);
     }
 
     @Override
+    public boolean isDeliveryExists(String deliveryId) {
+        return deliveryRepository.findById(deliveryId).isPresent();
+    }
+
+    @Override
     public Delivery checkDeliveryIsExist(CheckDeliveryIsExistRequest checkDeliveryIsExistRequest) {
-        return deliveryRepository.findByDelivererIdAndBoxIdAndUserIdAndDeliveryState(
+        return deliveryRepository.findByDelivererIdAndBoxIdAndUserIdAndDeliveryStatus(
                 checkDeliveryIsExistRequest.getDelivererId(),
                 checkDeliveryIsExistRequest.getBoxId(),
                 checkDeliveryIsExistRequest.getUserId(),
@@ -41,13 +52,18 @@ public class DeliveryCrudService implements IDeliveryCrudService{
 
     @Override
     public Delivery finishDelivery(FinishDeliveryRequest finishDeliveryRequest) {
-        Delivery delivery = deliveryRepository.findByDelivererIdAndBoxIdAndUserIdAndDeliveryState(
+        Delivery delivery = deliveryRepository.findByDelivererIdAndBoxIdAndUserIdAndDeliveryStatus(
                 finishDeliveryRequest.getDelivererId(),
                 finishDeliveryRequest.getBoxId(),
                 finishDeliveryRequest.getUserId(),
                 DeliveryStatus.SHIPPING.name()
         ).orElseThrow(IllegalArgumentException::new);
-        delivery.setDeliveryState(DeliveryStatus.DELIVERED);
+        delivery.setDeliveryStatus(DeliveryStatus.DELIVERED);
         return deliveryRepository.save(delivery);
+    }
+
+    @Override
+    public void deleteDeliveryById(String id) {
+        deliveryRepository.deleteById(id);
     }
 }
