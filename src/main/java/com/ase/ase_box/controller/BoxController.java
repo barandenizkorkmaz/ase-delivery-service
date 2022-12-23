@@ -5,7 +5,7 @@ import com.ase.ase_box.data.request.box.AddBoxRequest;
 import com.ase.ase_box.data.request.box.UpdateBoxRequest;
 import com.ase.ase_box.data.request.delivery.AddDeliveryToBoxStatusRequest;
 import com.ase.ase_box.data.request.delivery.TakeDeliveryFromBoxRequest;
-import com.ase.ase_box.data.response.BoxStatusResponse;
+import com.ase.ase_box.data.response.box.BoxStatusResponse;
 import com.ase.ase_box.service.box.IBoxCrudService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
