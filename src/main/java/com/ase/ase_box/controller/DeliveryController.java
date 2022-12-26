@@ -16,12 +16,12 @@ public class DeliveryController {
 
     private final DeliveryEntityService deliveryEntityService;
 
-    @PostMapping("")
+    @PostMapping("create")
     public ResponseEntity<AddDeliveryResponse> addDelivery(@RequestBody AddDeliveryRequest addDeliveryRequest){
         return ResponseEntity.ok(deliveryEntityService.createDelivery(addDeliveryRequest));
     }
 
-    @PostMapping("/{id}")
+    @PostMapping("")
     public ResponseEntity<DeliveryDto> getDelivery(@RequestParam("id") String id){
         return ResponseEntity.ok(deliveryEntityService.getDelivery(id));
     }
