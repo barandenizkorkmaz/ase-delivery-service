@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RequestMapping("delivery")
 @RequiredArgsConstructor
 @RestController
@@ -37,6 +39,31 @@ public class DeliveryController {
     @GetMapping("/list/{id}")
     public ResponseEntity<DeliveryDto> getDelivery(@PathVariable("id") String id){
         return ResponseEntity.ok(deliveryEntityService.getDelivery(id));
+    }
+
+    @GetMapping("/list/dispatcher/all")
+    public ResponseEntity<List<DeliveryDto>> getDeliveries(){
+        return ResponseEntity.ok(deliveryEntityService.getDeliveries());
+    }
+
+    @GetMapping("list/deliverer/{delivererId}")
+    public ResponseEntity<List<DeliveryDto>> getDeliveriesByDeliverer(@PathVariable("delivererId") String delivererId){
+        return ResponseEntity.ok(deliveryEntityService.getDeliveriesByDelivererId(delivererId));
+    }
+
+    @GetMapping("list/customer/all/{customerId}")
+    public ResponseEntity<List<DeliveryDto>> getDeliveriesByCustomer(@PathVariable("customerId") String customerId){
+        return ResponseEntity.ok(deliveryEntityService.getDeliveriesByCustomerId(customerId));
+    }
+
+    @GetMapping("list/customer/active/{customerId}")
+    public ResponseEntity<List<DeliveryDto>> getActiveDeliveriesByCustomer(@PathVariable("customerId") String customerId){
+        return ResponseEntity.ok(deliveryEntityService.getActiveDeliveriesByCustomerId(customerId));
+    }
+
+    @GetMapping("list/customer/past/{customerId}")
+    public ResponseEntity<List<DeliveryDto>> getPastDeliveriesByCustomer(@PathVariable("customerId") String customerId){
+        return ResponseEntity.ok(deliveryEntityService.getPastDeliveriesByCustomerId(customerId));
     }
 
 }

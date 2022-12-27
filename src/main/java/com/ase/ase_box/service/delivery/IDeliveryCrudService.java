@@ -6,6 +6,9 @@ import com.ase.ase_box.data.request.delivery.CheckDeliveryIsExistRequest;
 import com.ase.ase_box.data.request.delivery.FinishDeliveryRequest;
 import com.ase.ase_box.data.request.delivery.UpdateDeliveryRequest;
 
+import java.util.List;
+import java.util.Optional;
+
 public interface IDeliveryCrudService {
 
     Delivery saveDelivery(AddDeliveryRequest addDeliveryRequest);
@@ -13,6 +16,16 @@ public interface IDeliveryCrudService {
     Delivery updateDelivery(UpdateDeliveryRequest updateDeliveryRequest);
 
     Delivery getDelivery(String deliveryId);
+
+    List<Delivery> getDeliveries();
+
+    List<Delivery> getDeliveriesByDelivererId(String delivererId);
+
+    List<Delivery> getDeliveriesByCustomerId(String customerId);
+
+    List<Delivery> getActiveDeliveriesByCustomerId(String customerId);
+
+    List<Delivery> getPastDeliveriesByCustomerId(String customerId);
 
     boolean isDeliveryExists(String deliveryId);
 
@@ -22,4 +35,6 @@ public interface IDeliveryCrudService {
 
     // TODO: 18.11.2022 Update - Delete delivery should be added.
     void deleteDeliveryById(String id);
+
+
 }

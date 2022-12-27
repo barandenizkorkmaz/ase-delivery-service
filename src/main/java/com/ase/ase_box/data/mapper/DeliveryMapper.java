@@ -7,6 +7,8 @@ import com.ase.ase_box.data.request.delivery.UpdateDeliveryRequest;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring")
 public interface DeliveryMapper {
 
@@ -18,4 +20,5 @@ public interface DeliveryMapper {
 
     DeliveryDto convertToDeliveryDto(Delivery delivery);
 
+    List<DeliveryDto> convertToDeliveryDtoList(List<Delivery> deliveries);
 }

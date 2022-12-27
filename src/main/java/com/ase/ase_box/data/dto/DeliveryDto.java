@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class DeliveryDto {
     private String boxId;
     private String delivererId;
-    private String userId;
+    private String userId; // TODO: Refactor to customerId (since deliverer is also a user)
     private String id;
     private DeliveryStatus deliveryStatus;
 }

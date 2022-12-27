@@ -11,6 +11,9 @@ import com.ase.ase_box.data.response.delivery.UpdateDeliveryResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
+
 import static com.ase.ase_box.data.mapper.DeliveryMapper.DELIVERY_MAPPER;
 
 @Service
@@ -72,5 +75,30 @@ public class DeliveryEntityService implements IDeliveryEntityService{
     @Override
     public DeliveryDto getDelivery(String deliveryId) {
         return DELIVERY_MAPPER.convertToDeliveryDto(deliveryCrudService.getDelivery(deliveryId));
+    }
+
+    @Override
+    public List<DeliveryDto> getDeliveries() {
+        return DELIVERY_MAPPER.convertToDeliveryDtoList(deliveryCrudService.getDeliveries());
+    }
+
+    @Override
+    public List<DeliveryDto> getDeliveriesByDelivererId(String delivererId) {
+        return DELIVERY_MAPPER.convertToDeliveryDtoList(deliveryCrudService.getDeliveriesByDelivererId(delivererId));
+    }
+
+    @Override
+    public List<DeliveryDto> getDeliveriesByCustomerId(String customerId) {
+        return DELIVERY_MAPPER.convertToDeliveryDtoList(deliveryCrudService.getDeliveriesByCustomerId(customerId));
+    }
+
+    @Override
+    public List<DeliveryDto> getActiveDeliveriesByCustomerId(String customerId) {
+        return DELIVERY_MAPPER.convertToDeliveryDtoList(deliveryCrudService.getActiveDeliveriesByCustomerId(customerId));
+    }
+
+    @Override
+    public List<DeliveryDto> getPastDeliveriesByCustomerId(String customerId) {
+        return DELIVERY_MAPPER.convertToDeliveryDtoList(deliveryCrudService.getPastDeliveriesByCustomerId(customerId));
     }
 }
