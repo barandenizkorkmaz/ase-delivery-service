@@ -31,7 +31,7 @@ public interface IDeliveryEntityService {
 
     boolean isDeliveryExists(String deliveryId);
 
-    boolean isCreateDeliveryValid(IsCreateDeliveryValidRequest checkDeliveryIsExistRequest);
+    boolean isCreateDeliveryValid(IsCreateDeliveryValidRequest isCreateDeliveryValidRequest);
 
     // TODO: 18.11.2022 Update - Delete delivery should be added.
     void deleteDeliveryById(String id);

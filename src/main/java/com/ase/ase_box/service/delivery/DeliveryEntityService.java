@@ -82,14 +82,14 @@ public class DeliveryEntityService implements IDeliveryEntityService{
 
     @Override
     public List<Delivery> getActiveDeliveriesByCustomerId(String customerId) {
-        String[] deliveryStatus = new String[] { DeliveryStatus.DISPATCHED.name(), DeliveryStatus.SHIPPING.name() };
+        String[] deliveryStatus = new String[] { DeliveryStatus.DISPATCHED.name(), DeliveryStatus.SHIPPING.name(), DeliveryStatus.DELIVERED.name() };
         return deliveryRepository.findAllByCustomerIdAndDeliveryStatusIn(customerId, Arrays.asList(deliveryStatus))
                 .orElseThrow(IllegalAccessError::new);
     }
 
     @Override
     public List<Delivery> getPastDeliveriesByCustomerId(String customerId) {
-        String[] deliveryStatus = new String[] { DeliveryStatus.DELIVERED.name() };
+        String[] deliveryStatus = new String[] { DeliveryStatus.COLLECTED.name() };
         return deliveryRepository.findAllByCustomerIdAndDeliveryStatusIn(customerId, Arrays.asList(deliveryStatus))
                 .orElseThrow(IllegalAccessError::new);
     }

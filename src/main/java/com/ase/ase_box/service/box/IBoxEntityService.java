@@ -1,6 +1,7 @@
 package com.ase.ase_box.service.box;
 
 import com.ase.ase_box.data.entity.Box;
+import com.ase.ase_box.data.request.box.IsCreateBoxValidRequest;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,4 +17,9 @@ public interface IBoxEntityService {
     Optional<Box> getBoxById(String boxId);
 
     List<Box> getAllBoxes();
+
+    boolean isBoxExists(String id);
+
+    boolean isCreateBoxValid(IsCreateBoxValidRequest isCreateBoxValidRequest);
+
 }

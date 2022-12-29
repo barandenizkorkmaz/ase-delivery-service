@@ -24,6 +24,7 @@ public class Box extends BaseEntity {
 
     private String address;
 
+    @Column(unique = true)
     private String raspberryId;
 
     @Column(unique = true)

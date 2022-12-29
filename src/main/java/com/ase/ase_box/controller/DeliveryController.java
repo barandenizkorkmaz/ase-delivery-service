@@ -25,16 +25,6 @@ public class DeliveryController {
         return ResponseEntity.ok(deliveryCrudService.createDelivery(createDeliveryRequest));
     }
 
-    @PostMapping("/delete/{id}")
-    public ResponseEntity<DeleteDeliveryResponse> deleteDelivery(@PathVariable("id") String id){
-        return ResponseEntity.ok(deliveryCrudService.deleteDelivery(id));
-    }
-
-    @PutMapping("/update")
-    public ResponseEntity<UpdateDeliveryResponse> updateDelivery(@RequestBody UpdateDeliveryRequest updateDeliveryRequest){
-        return ResponseEntity.ok(deliveryCrudService.updateDelivery(updateDeliveryRequest));
-    }
-
     @GetMapping("/list/{id}")
     public ResponseEntity<DeliveryDto> getDelivery(@PathVariable("id") String id){
         return ResponseEntity.ok(deliveryCrudService.getDelivery(id));
@@ -43,6 +33,16 @@ public class DeliveryController {
     @GetMapping("/list/dispatcher/all")
     public ResponseEntity<List<DeliveryDto>> getDeliveries(){
         return ResponseEntity.ok(deliveryCrudService.getDeliveries());
+    }
+
+    @PostMapping("/delete/{id}")
+    public ResponseEntity<DeleteDeliveryResponse> deleteDelivery(@PathVariable("id") String id){
+        return ResponseEntity.ok(deliveryCrudService.deleteDelivery(id));
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<UpdateDeliveryResponse> updateDelivery(@RequestBody UpdateDeliveryRequest updateDeliveryRequest){
+        return ResponseEntity.ok(deliveryCrudService.updateDelivery(updateDeliveryRequest));
     }
 
     @GetMapping("list/deliverer/{delivererId}")

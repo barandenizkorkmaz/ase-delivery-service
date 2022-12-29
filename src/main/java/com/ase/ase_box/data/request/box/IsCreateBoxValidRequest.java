@@ -5,12 +5,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Builder
-@AllArgsConstructor
 @Data
+@AllArgsConstructor
 @NoArgsConstructor
-public class AddBoxRequest {
+@Builder
+public class IsCreateBoxValidRequest {
     private String name;
     private String raspberryId;
-    private String address;
 }
