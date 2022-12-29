@@ -55,13 +55,21 @@ public class DeliveryCrudService implements IDeliveryCrudService{
 
     @Override
     public UpdateDeliveryResponse updateDelivery(UpdateDeliveryRequest updateDeliveryRequest) {
-        Delivery delivery = deliveryEntityService.getDeliveryById(updateDeliveryRequest.getId())
-                .orElseThrow(IllegalArgumentException::new);
-        DELIVERY_MAPPER.updateDelivery(delivery, updateDeliveryRequest);
-        deliveryEntityService.updateDelivery(delivery);
+        boolean isValid = deliveryEntityService.isCreateDeliveryValid(
+                IsCreateDeliveryValidRequest.builder()
+                        .boxId(updateDeliveryRequest.getBoxId())
+                        .customerId(updateDeliveryRequest.getCustomerId())
+                        .build()
+        );
+        if(isValid){
+            Delivery delivery = deliveryEntityService.getDeliveryById(updateDeliveryRequest.getId())
+                    .orElseThrow(IllegalArgumentException::new);
+            DELIVERY_MAPPER.updateDelivery(delivery, updateDeliveryRequest);
+            deliveryEntityService.updateDelivery(delivery);
+        }
         return UpdateDeliveryResponse
                 .builder()
-                .isSuccessful(true)
+                .isSuccessful(isValid)
                 .build();
     }
 

@@ -55,7 +55,7 @@ public class DeliveryEntityService implements IDeliveryEntityService{
 
     @Override
     public boolean isCreateDeliveryValid(IsCreateDeliveryValidRequest isCreateDeliveryValidRequest) {
-        Optional<List<Delivery>> entity = deliveryRepository.findAllByBoxIdAndDelivererIdIsNot(isCreateDeliveryValidRequest.getBoxId(), isCreateDeliveryValidRequest.getCustomerId());
+        Optional<List<Delivery>> entity = deliveryRepository.findAllByBoxIdAndCustomerIdIsNot(isCreateDeliveryValidRequest.getBoxId(), isCreateDeliveryValidRequest.getCustomerId());
         if(entity.isPresent()){
             List<Delivery> deliveries = entity.get();
             return deliveries.isEmpty();
