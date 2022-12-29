@@ -8,5 +8,11 @@ import java.util.Optional;
 
 public interface DeliveryRepository extends MongoRepository<Delivery,String> {
 
-    Optional<Delivery> findByDelivererIdAndBoxIdAndUserIdAndDeliveryState(String delivererId, String boxId, String userId, String deliveryState);
+    Optional<Delivery> findByDelivererIdAndBoxIdAndUserIdAndDeliveryStatus(String delivererId, String boxId, String userId, String deliveryStatus);
+
+    Optional<List<Delivery>> findAllByDelivererId(String delivererId);
+
+    Optional<List<Delivery>> findAllByUserId(String userId);
+
+    Optional<List<Delivery>> findAllByUserIdAndDeliveryStatusIn(String userId, List<String> deliveryStatus);
 }

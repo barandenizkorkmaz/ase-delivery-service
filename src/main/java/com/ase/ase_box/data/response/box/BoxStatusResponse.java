@@ -1,4 +1,4 @@
-package com.ase.ase_box.data.response;
+package com.ase.ase_box.data.response.box;
 
 import com.ase.ase_box.data.enums.BoxStatus;
 import lombok.AllArgsConstructor;

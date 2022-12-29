@@ -4,9 +4,15 @@ import com.ase.ase_box.data.dto.DeliveryDto;
 import com.ase.ase_box.data.entity.Delivery;
 import com.ase.ase_box.data.request.delivery.AddDeliveryRequest;
 import com.ase.ase_box.data.request.delivery.CheckDeliveryIsExistRequest;
-import com.ase.ase_box.data.response.AddDeliveryResponse;
+import com.ase.ase_box.data.request.delivery.UpdateDeliveryRequest;
+import com.ase.ase_box.data.response.delivery.AddDeliveryResponse;
+import com.ase.ase_box.data.response.delivery.DeleteDeliveryResponse;
+import com.ase.ase_box.data.response.delivery.UpdateDeliveryResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
 
 import static com.ase.ase_box.data.mapper.DeliveryMapper.DELIVERY_MAPPER;
 
@@ -41,7 +47,58 @@ public class DeliveryEntityService implements IDeliveryEntityService{
     }
 
     @Override
+    public DeleteDeliveryResponse deleteDelivery(String deliveryId) {
+        boolean isSuccessful = false;
+        if(deliveryCrudService.isDeliveryExists(deliveryId)){
+            deliveryCrudService.deleteDeliveryById(deliveryId);
+            isSuccessful = true;
+        }
+        return DeleteDeliveryResponse
+                .builder()
+                .isSuccessful(isSuccessful)
+                .build();
+    }
+
+    @Override
+    public UpdateDeliveryResponse updateDelivery(UpdateDeliveryRequest updateDeliveryRequest) {
+        boolean isSuccessful = false;
+        if(deliveryCrudService.isDeliveryExists(updateDeliveryRequest.getId())){
+            deliveryCrudService.updateDelivery(updateDeliveryRequest);
+            isSuccessful = true;
+        }
+        return UpdateDeliveryResponse
+                .builder()
+                .isSuccessful(isSuccessful)
+                .build();
+    }
+
+    @Override
     public DeliveryDto getDelivery(String deliveryId) {
         return DELIVERY_MAPPER.convertToDeliveryDto(deliveryCrudService.getDelivery(deliveryId));
+    }
+
+    @Override
+    public List<DeliveryDto> getDeliveries() {
+        return DELIVERY_MAPPER.convertToDeliveryDtoList(deliveryCrudService.getDeliveries());
+    }
+
+    @Override
+    public List<DeliveryDto> getDeliveriesByDelivererId(String delivererId) {
+        return DELIVERY_MAPPER.convertToDeliveryDtoList(deliveryCrudService.getDeliveriesByDelivererId(delivererId));
+    }
+
+    @Override
+    public List<DeliveryDto> getDeliveriesByCustomerId(String customerId) {
+        return DELIVERY_MAPPER.convertToDeliveryDtoList(deliveryCrudService.getDeliveriesByCustomerId(customerId));
+    }
+
+    @Override
+    public List<DeliveryDto> getActiveDeliveriesByCustomerId(String customerId) {
+        return DELIVERY_MAPPER.convertToDeliveryDtoList(deliveryCrudService.getActiveDeliveriesByCustomerId(customerId));
+    }
+
+    @Override
+    public List<DeliveryDto> getPastDeliveriesByCustomerId(String customerId) {
+        return DELIVERY_MAPPER.convertToDeliveryDtoList(deliveryCrudService.getPastDeliveriesByCustomerId(customerId));
     }
 }

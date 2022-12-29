@@ -10,7 +10,7 @@ import com.ase.ase_box.data.request.box.UpdateBoxRequest;
 import com.ase.ase_box.data.request.delivery.CheckDeliveryIsExistRequest;
 import com.ase.ase_box.data.request.delivery.FinishDeliveryRequest;
 import com.ase.ase_box.data.request.delivery.TakeDeliveryFromBoxRequest;
-import com.ase.ase_box.data.response.BoxStatusResponse;
+import com.ase.ase_box.data.response.box.BoxStatusResponse;
 import com.ase.ase_box.service.delivery.IDeliveryCrudService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
