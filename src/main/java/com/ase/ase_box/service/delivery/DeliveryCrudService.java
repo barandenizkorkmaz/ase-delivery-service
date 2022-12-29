@@ -2,10 +2,13 @@ package com.ase.ase_box.service.delivery;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import com.ase.ase_box.data.dto.DeliveryDto;
 import com.ase.ase_box.data.entity.Delivery;
+import com.ase.ase_box.data.enums.DeliveryStatus;
+import com.ase.ase_box.data.request.delivery.AttemptDeliveryRequest;
 import com.ase.ase_box.data.request.delivery.CreateDeliveryRequest;
 import com.ase.ase_box.data.request.delivery.IsCreateDeliveryValidRequest;
 import com.ase.ase_box.data.request.delivery.UpdateDeliveryRequest;
@@ -105,4 +108,16 @@ public class DeliveryCrudService implements IDeliveryCrudService{
         return DELIVERY_MAPPER.convertToDeliveryDtoList(deliveryEntityService.getPastDeliveriesByCustomerId(customerId));
     }
 
+    @Override
+    public void attemptDelivery(AttemptDeliveryRequest attemptDeliveryRequest) throws IllegalAccessException {
+        Delivery delivery = deliveryEntityService.getDeliveryById(attemptDeliveryRequest.getDeliveryId())
+                .orElseThrow(IllegalArgumentException::new);
+        if(delivery.getDelivererId().equals(attemptDeliveryRequest.getCandidateDelivererId())){
+            delivery.setDeliveryStatus(DeliveryStatus.SHIPPING);
+            deliveryEntityService.updateDelivery(delivery);
+        }
+        else {
+            throw new IllegalAccessException();
+        }
+    }
 }

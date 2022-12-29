@@ -2,12 +2,14 @@ package com.ase.ase_box.controller;
 
 import com.ase.ase_box.data.dto.DeliveryDto;
 import com.ase.ase_box.data.request.delivery.CreateDeliveryRequest;
+import com.ase.ase_box.data.request.delivery.AttemptDeliveryRequest;
 import com.ase.ase_box.data.request.delivery.UpdateDeliveryRequest;
 import com.ase.ase_box.data.response.delivery.CreateDeliveryResponse;
 import com.ase.ase_box.data.response.delivery.DeleteDeliveryResponse;
 import com.ase.ase_box.data.response.delivery.UpdateDeliveryResponse;
 import com.ase.ase_box.service.delivery.DeliveryCrudService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -63,6 +65,16 @@ public class DeliveryController {
     @GetMapping("list/customer/past/{customerId}")
     public ResponseEntity<List<DeliveryDto>> getPastDeliveriesByCustomer(@PathVariable("customerId") String customerId){
         return ResponseEntity.ok(deliveryCrudService.getPastDeliveriesByCustomerId(customerId));
+    }
+
+    @PostMapping("/attempt")
+    public ResponseEntity<HttpStatus> attemptDelivery(@RequestBody AttemptDeliveryRequest attemptDeliveryRequest){
+        try{
+            deliveryCrudService.attemptDelivery(attemptDeliveryRequest);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (IllegalAccessException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
 }

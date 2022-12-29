@@ -27,7 +27,6 @@ import static com.ase.ase_box.data.mapper.DeliveryMapper.DELIVERY_MAPPER;
 public class BoxCrudService implements IBoxCrudService {
 
     private final IBoxEntityService boxEntityService;
-    private final IDeliveryCrudService deliveryCrudService;
 
     @Override
     public CreateBoxResponse createBox(CreateBoxRequest createBoxRequest) {
