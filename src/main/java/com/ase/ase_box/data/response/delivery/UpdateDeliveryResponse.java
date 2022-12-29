@@ -11,6 +11,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UpdateDeliveryResponse {
-    DeliveryDto deliveryDto;
     boolean isSuccessful;
 }

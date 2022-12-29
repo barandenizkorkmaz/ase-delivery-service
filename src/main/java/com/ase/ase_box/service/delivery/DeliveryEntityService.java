@@ -1,104 +1,96 @@
 package com.ase.ase_box.service.delivery;
 
 import com.ase.ase_box.data.dto.DeliveryDto;
+import com.ase.ase_box.data.entity.Box;
 import com.ase.ase_box.data.entity.Delivery;
-import com.ase.ase_box.data.request.delivery.AddDeliveryRequest;
-import com.ase.ase_box.data.request.delivery.CheckDeliveryIsExistRequest;
+import com.ase.ase_box.data.enums.DeliveryStatus;
+import com.ase.ase_box.data.request.delivery.CreateDeliveryRequest;
+import com.ase.ase_box.data.request.delivery.IsCreateDeliveryValidRequest;
 import com.ase.ase_box.data.request.delivery.UpdateDeliveryRequest;
-import com.ase.ase_box.data.response.delivery.AddDeliveryResponse;
+import com.ase.ase_box.data.response.delivery.CreateDeliveryResponse;
 import com.ase.ase_box.data.response.delivery.DeleteDeliveryResponse;
 import com.ase.ase_box.data.response.delivery.UpdateDeliveryResponse;
+import com.ase.ase_box.repository.DeliveryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import static com.ase.ase_box.data.mapper.BoxMapper.BOX_MAPPER;
 import static com.ase.ase_box.data.mapper.DeliveryMapper.DELIVERY_MAPPER;
 
 @Service
 @RequiredArgsConstructor
 public class DeliveryEntityService implements IDeliveryEntityService{
 
-    private final DeliveryCrudService deliveryCrudService;
+
+    private final DeliveryRepository deliveryRepository;
 
     @Override
-    public AddDeliveryResponse createDelivery(AddDeliveryRequest addDeliveryRequest) {
-        try {
-            Delivery delivery = deliveryCrudService.checkDeliveryIsExist(
-                    CheckDeliveryIsExistRequest.builder()
-                            .delivererId(addDeliveryRequest.getDelivererId())
-                            .boxId(addDeliveryRequest.getBoxId())
-                            .build()
-            );
-            return AddDeliveryResponse.
-                    builder()
-                    .deliveryDto(DELIVERY_MAPPER.convertToDeliveryDto(delivery))
-                    .isSuccessful(false)
-                    .build();
-        }catch (Exception e){
-            Delivery delivery = deliveryCrudService.saveDelivery(addDeliveryRequest);
-            return AddDeliveryResponse.
-                    builder()
-                    .deliveryDto(DELIVERY_MAPPER.convertToDeliveryDto(delivery))
-                    .isSuccessful(true)
-                    .build();
+    public Delivery saveDelivery(CreateDeliveryRequest createDeliveryRequest) {
+        return deliveryRepository.save(DELIVERY_MAPPER.createDelivery(createDeliveryRequest));
+    }
+
+    @Override
+    public Delivery updateDelivery(Delivery delivery) {
+        return deliveryRepository.save(delivery);
+    }
+
+    @Override
+    public Optional<Delivery> getDeliveryById(String id) {
+        return deliveryRepository.findById(id);
+    }
+
+    @Override
+    public List<Delivery> getDeliveries() {
+        return deliveryRepository.findAll();
+    }
+
+    @Override
+    public boolean isDeliveryExists(String id) {
+        return deliveryRepository.findById(id).isPresent();
+    }
+
+    @Override
+    public boolean isCreateDeliveryValid(IsCreateDeliveryValidRequest isCreateDeliveryValidRequest) {
+        Optional<List<Delivery>> entity = deliveryRepository.findAllByBoxIdAndDelivererIdIsNot(isCreateDeliveryValidRequest.getBoxId(), isCreateDeliveryValidRequest.getCustomerId());
+        if(entity.isPresent()){
+            List<Delivery> deliveries = entity.get();
+            return deliveries.isEmpty();
         }
+        return true;
     }
 
     @Override
-    public DeleteDeliveryResponse deleteDelivery(String deliveryId) {
-        boolean isSuccessful = false;
-        if(deliveryCrudService.isDeliveryExists(deliveryId)){
-            deliveryCrudService.deleteDeliveryById(deliveryId);
-            isSuccessful = true;
-        }
-        return DeleteDeliveryResponse
-                .builder()
-                .isSuccessful(isSuccessful)
-                .build();
+    public void deleteDeliveryById(String id) {
+        deliveryRepository.deleteById(id);
     }
 
     @Override
-    public UpdateDeliveryResponse updateDelivery(UpdateDeliveryRequest updateDeliveryRequest) {
-        boolean isSuccessful = false;
-        if(deliveryCrudService.isDeliveryExists(updateDeliveryRequest.getId())){
-            deliveryCrudService.updateDelivery(updateDeliveryRequest);
-            isSuccessful = true;
-        }
-        return UpdateDeliveryResponse
-                .builder()
-                .isSuccessful(isSuccessful)
-                .build();
+    public List<Delivery> getDeliveriesByDelivererId(String delivererId) {
+        return deliveryRepository.findAllByDelivererId(delivererId)
+                .orElseThrow(IllegalAccessError::new);
     }
 
     @Override
-    public DeliveryDto getDelivery(String deliveryId) {
-        return DELIVERY_MAPPER.convertToDeliveryDto(deliveryCrudService.getDelivery(deliveryId));
+    public List<Delivery> getDeliveriesByCustomerId(String customerId) {
+        return deliveryRepository.findAllByCustomerId(customerId)
+                .orElseThrow(IllegalAccessError::new);
     }
 
     @Override
-    public List<DeliveryDto> getDeliveries() {
-        return DELIVERY_MAPPER.convertToDeliveryDtoList(deliveryCrudService.getDeliveries());
+    public List<Delivery> getActiveDeliveriesByCustomerId(String customerId) {
+        String[] deliveryStatus = new String[] { DeliveryStatus.DISPATCHED.name(), DeliveryStatus.SHIPPING.name() };
+        return deliveryRepository.findAllByCustomerIdAndDeliveryStatusIn(customerId, Arrays.asList(deliveryStatus))
+                .orElseThrow(IllegalAccessError::new);
     }
 
     @Override
-    public List<DeliveryDto> getDeliveriesByDelivererId(String delivererId) {
-        return DELIVERY_MAPPER.convertToDeliveryDtoList(deliveryCrudService.getDeliveriesByDelivererId(delivererId));
-    }
-
-    @Override
-    public List<DeliveryDto> getDeliveriesByCustomerId(String customerId) {
-        return DELIVERY_MAPPER.convertToDeliveryDtoList(deliveryCrudService.getDeliveriesByCustomerId(customerId));
-    }
-
-    @Override
-    public List<DeliveryDto> getActiveDeliveriesByCustomerId(String customerId) {
-        return DELIVERY_MAPPER.convertToDeliveryDtoList(deliveryCrudService.getActiveDeliveriesByCustomerId(customerId));
-    }
-
-    @Override
-    public List<DeliveryDto> getPastDeliveriesByCustomerId(String customerId) {
-        return DELIVERY_MAPPER.convertToDeliveryDtoList(deliveryCrudService.getPastDeliveriesByCustomerId(customerId));
+    public List<Delivery> getPastDeliveriesByCustomerId(String customerId) {
+        String[] deliveryStatus = new String[] { DeliveryStatus.DELIVERED.name() };
+        return deliveryRepository.findAllByCustomerIdAndDeliveryStatusIn(customerId, Arrays.asList(deliveryStatus))
+                .orElseThrow(IllegalAccessError::new);
     }
 }

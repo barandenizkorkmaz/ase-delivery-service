@@ -1,9 +1,11 @@
 package com.ase.ase_box.service.delivery;
 
 import com.ase.ase_box.data.dto.DeliveryDto;
-import com.ase.ase_box.data.request.delivery.AddDeliveryRequest;
+import com.ase.ase_box.data.entity.Delivery;
+import com.ase.ase_box.data.request.delivery.CreateDeliveryRequest;
+import com.ase.ase_box.data.request.delivery.IsCreateDeliveryValidRequest;
 import com.ase.ase_box.data.request.delivery.UpdateDeliveryRequest;
-import com.ase.ase_box.data.response.delivery.AddDeliveryResponse;
+import com.ase.ase_box.data.response.delivery.CreateDeliveryResponse;
 import com.ase.ase_box.data.response.delivery.DeleteDeliveryResponse;
 import com.ase.ase_box.data.response.delivery.UpdateDeliveryResponse;
 
@@ -11,22 +13,28 @@ import java.util.List;
 import java.util.Optional;
 
 public interface IDeliveryEntityService {
+    Delivery saveDelivery(CreateDeliveryRequest createDeliveryRequest);
 
-    AddDeliveryResponse createDelivery(AddDeliveryRequest addDeliveryRequest);
+    Delivery updateDelivery(Delivery delivery);
 
-    UpdateDeliveryResponse updateDelivery(UpdateDeliveryRequest updateDeliveryRequest);
+    Optional<Delivery> getDeliveryById(String deliveryId);
 
-    DeleteDeliveryResponse deleteDelivery(String deliveryId);
+    List<Delivery> getDeliveries();
 
-    DeliveryDto getDelivery(String deliveryId);
+    List<Delivery> getDeliveriesByDelivererId(String delivererId);
 
-    List<DeliveryDto> getDeliveries();
+    List<Delivery> getDeliveriesByCustomerId(String customerId);
 
-    List<DeliveryDto> getDeliveriesByDelivererId(String delivererId);
+    List<Delivery> getActiveDeliveriesByCustomerId(String customerId);
 
-    List<DeliveryDto> getDeliveriesByCustomerId(String customerId);
+    List<Delivery> getPastDeliveriesByCustomerId(String customerId);
 
-    List<DeliveryDto> getActiveDeliveriesByCustomerId(String customerId);
+    boolean isDeliveryExists(String deliveryId);
 
-    List<DeliveryDto> getPastDeliveriesByCustomerId(String customerId);
+    boolean isCreateDeliveryValid(IsCreateDeliveryValidRequest checkDeliveryIsExistRequest);
+
+    // TODO: 18.11.2022 Update - Delete delivery should be added.
+    void deleteDeliveryById(String id);
+
+
 }

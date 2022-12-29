@@ -1,5 +1,4 @@
-package com.ase.ase_box.data.request.delivery;
-
+package com.ase.ase_box.data.response.delivery;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,10 +6,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class TakeDeliveryFromBoxRequest {
-    private String userId;
-    private String boxId;
+public class CreateDeliveryResponse {
+    boolean isSuccessful;
 }

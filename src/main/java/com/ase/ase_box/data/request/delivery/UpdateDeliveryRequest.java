@@ -20,7 +20,7 @@ public class UpdateDeliveryRequest {
 
     private String delivererId;
 
-    private String userId;
+    private String customerId;
 
     @Enumerated(EnumType.STRING)
     private DeliveryStatus deliveryStatus;

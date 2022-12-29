@@ -11,9 +11,10 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class DeliveryDto {
+    private String id;
     private String boxId;
     private String delivererId;
-    private String userId; // TODO: Refactor to customerId (since deliverer is also a user)
-    private String id;
+    private String customerId;
     private DeliveryStatus deliveryStatus;
+
 }

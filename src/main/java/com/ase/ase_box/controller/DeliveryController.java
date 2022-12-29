@@ -1,12 +1,12 @@
 package com.ase.ase_box.controller;
 
 import com.ase.ase_box.data.dto.DeliveryDto;
-import com.ase.ase_box.data.request.delivery.AddDeliveryRequest;
+import com.ase.ase_box.data.request.delivery.CreateDeliveryRequest;
 import com.ase.ase_box.data.request.delivery.UpdateDeliveryRequest;
-import com.ase.ase_box.data.response.delivery.AddDeliveryResponse;
+import com.ase.ase_box.data.response.delivery.CreateDeliveryResponse;
 import com.ase.ase_box.data.response.delivery.DeleteDeliveryResponse;
 import com.ase.ase_box.data.response.delivery.UpdateDeliveryResponse;
-import com.ase.ase_box.service.delivery.DeliveryEntityService;
+import com.ase.ase_box.service.delivery.DeliveryCrudService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,52 +18,51 @@ import java.util.List;
 @RestController
 public class DeliveryController {
 
-    private final DeliveryEntityService deliveryEntityService;
+    private final DeliveryCrudService deliveryCrudService;
 
     @PostMapping("/create")
-    public ResponseEntity<AddDeliveryResponse> addDelivery(@RequestBody AddDeliveryRequest addDeliveryRequest){
-        return ResponseEntity.ok(deliveryEntityService.createDelivery(addDeliveryRequest));
+    public ResponseEntity<CreateDeliveryResponse> createDelivery(@RequestBody CreateDeliveryRequest createDeliveryRequest){
+        return ResponseEntity.ok(deliveryCrudService.createDelivery(createDeliveryRequest));
     }
 
     @PostMapping("/delete/{id}")
     public ResponseEntity<DeleteDeliveryResponse> deleteDelivery(@PathVariable("id") String id){
-        return ResponseEntity.ok(deliveryEntityService.deleteDelivery(id));
+        return ResponseEntity.ok(deliveryCrudService.deleteDelivery(id));
     }
 
     @PutMapping("/update")
     public ResponseEntity<UpdateDeliveryResponse> updateDelivery(@RequestBody UpdateDeliveryRequest updateDeliveryRequest){
-        return ResponseEntity.ok(deliveryEntityService.updateDelivery(updateDeliveryRequest));
+        return ResponseEntity.ok(deliveryCrudService.updateDelivery(updateDeliveryRequest));
     }
-
 
     @GetMapping("/list/{id}")
     public ResponseEntity<DeliveryDto> getDelivery(@PathVariable("id") String id){
-        return ResponseEntity.ok(deliveryEntityService.getDelivery(id));
+        return ResponseEntity.ok(deliveryCrudService.getDelivery(id));
     }
 
     @GetMapping("/list/dispatcher/all")
     public ResponseEntity<List<DeliveryDto>> getDeliveries(){
-        return ResponseEntity.ok(deliveryEntityService.getDeliveries());
+        return ResponseEntity.ok(deliveryCrudService.getDeliveries());
     }
 
     @GetMapping("list/deliverer/{delivererId}")
     public ResponseEntity<List<DeliveryDto>> getDeliveriesByDeliverer(@PathVariable("delivererId") String delivererId){
-        return ResponseEntity.ok(deliveryEntityService.getDeliveriesByDelivererId(delivererId));
+        return ResponseEntity.ok(deliveryCrudService.getDeliveriesByDelivererId(delivererId));
     }
 
     @GetMapping("list/customer/all/{customerId}")
     public ResponseEntity<List<DeliveryDto>> getDeliveriesByCustomer(@PathVariable("customerId") String customerId){
-        return ResponseEntity.ok(deliveryEntityService.getDeliveriesByCustomerId(customerId));
+        return ResponseEntity.ok(deliveryCrudService.getDeliveriesByCustomerId(customerId));
     }
 
     @GetMapping("list/customer/active/{customerId}")
     public ResponseEntity<List<DeliveryDto>> getActiveDeliveriesByCustomer(@PathVariable("customerId") String customerId){
-        return ResponseEntity.ok(deliveryEntityService.getActiveDeliveriesByCustomerId(customerId));
+        return ResponseEntity.ok(deliveryCrudService.getActiveDeliveriesByCustomerId(customerId));
     }
 
     @GetMapping("list/customer/past/{customerId}")
     public ResponseEntity<List<DeliveryDto>> getPastDeliveriesByCustomer(@PathVariable("customerId") String customerId){
-        return ResponseEntity.ok(deliveryEntityService.getPastDeliveriesByCustomerId(customerId));
+        return ResponseEntity.ok(deliveryCrudService.getPastDeliveriesByCustomerId(customerId));
     }
 
 }
