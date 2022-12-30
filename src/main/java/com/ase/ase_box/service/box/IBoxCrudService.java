@@ -1,6 +1,7 @@
 package com.ase.ase_box.service.box;
 
 import com.ase.ase_box.data.dto.BoxDto;
+import com.ase.ase_box.data.request.box.BoxRequest;
 import com.ase.ase_box.data.request.box.CreateBoxRequest;
 import com.ase.ase_box.data.request.box.UpdateBoxRequest;
 import com.ase.ase_box.data.response.box.CreateBoxResponse;
@@ -20,4 +21,8 @@ public interface IBoxCrudService {
     BoxDto getBoxById(String boxId);
 
     List<BoxDto> getAllBoxes();
+
+    void unlockBox(String id, BoxRequest unlockBoxRequest) throws IllegalAccessException;
+
+    void lockBox(String id, BoxRequest lockRequest) throws IllegalAccessException;
 }

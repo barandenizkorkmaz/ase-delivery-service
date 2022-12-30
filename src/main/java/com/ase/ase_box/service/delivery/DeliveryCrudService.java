@@ -8,10 +8,7 @@ import java.util.Optional;
 import com.ase.ase_box.data.dto.DeliveryDto;
 import com.ase.ase_box.data.entity.Delivery;
 import com.ase.ase_box.data.enums.DeliveryStatus;
-import com.ase.ase_box.data.request.delivery.AttemptDeliveryRequest;
-import com.ase.ase_box.data.request.delivery.CreateDeliveryRequest;
-import com.ase.ase_box.data.request.delivery.IsCreateDeliveryValidRequest;
-import com.ase.ase_box.data.request.delivery.UpdateDeliveryRequest;
+import com.ase.ase_box.data.request.delivery.*;
 import com.ase.ase_box.data.response.delivery.CreateDeliveryResponse;
 import com.ase.ase_box.data.response.delivery.DeleteDeliveryResponse;
 import com.ase.ase_box.data.response.delivery.UpdateDeliveryResponse;
@@ -57,15 +54,16 @@ public class DeliveryCrudService implements IDeliveryCrudService{
     }
 
     @Override
-    public UpdateDeliveryResponse updateDelivery(UpdateDeliveryRequest updateDeliveryRequest) {
-        boolean isValid = deliveryEntityService.isCreateDeliveryValid(
-                IsCreateDeliveryValidRequest.builder()
+    public UpdateDeliveryResponse updateDelivery(String id, UpdateDeliveryRequest updateDeliveryRequest) {
+        boolean isValid = deliveryEntityService.isUpdateDeliveryValid(
+                id,
+                IsUpdateDeliveryValidRequest.builder()
                         .boxId(updateDeliveryRequest.getBoxId())
                         .customerId(updateDeliveryRequest.getCustomerId())
                         .build()
         );
         if(isValid){
-            Delivery delivery = deliveryEntityService.getDeliveryById(updateDeliveryRequest.getId())
+            Delivery delivery = deliveryEntityService.getDeliveryById(id)
                     .orElseThrow(IllegalArgumentException::new);
             DELIVERY_MAPPER.updateDelivery(delivery, updateDeliveryRequest);
             deliveryEntityService.updateDelivery(delivery);
@@ -112,7 +110,7 @@ public class DeliveryCrudService implements IDeliveryCrudService{
     public void attemptDelivery(AttemptDeliveryRequest attemptDeliveryRequest) throws IllegalAccessException {
         Delivery delivery = deliveryEntityService.getDeliveryById(attemptDeliveryRequest.getDeliveryId())
                 .orElseThrow(IllegalArgumentException::new);
-        if(delivery.getDelivererId().equals(attemptDeliveryRequest.getCandidateDelivererId())){
+        if(delivery.getDelivererId().equals(attemptDeliveryRequest.getCandidateDelivererId()) && delivery.getDeliveryStatus().equals(DeliveryStatus.DISPATCHED)){
             delivery.setDeliveryStatus(DeliveryStatus.SHIPPING);
             deliveryEntityService.updateDelivery(delivery);
         }

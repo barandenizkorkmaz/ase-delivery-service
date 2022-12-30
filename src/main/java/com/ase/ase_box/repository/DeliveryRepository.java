@@ -1,6 +1,7 @@
 package com.ase.ase_box.repository;
 
 import com.ase.ase_box.data.entity.Delivery;
+import com.ase.ase_box.data.enums.DeliveryStatus;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 
@@ -10,11 +11,17 @@ import java.util.Optional;
 
 public interface DeliveryRepository extends MongoRepository<Delivery,String> {
 
-    Optional<List<Delivery>> findAllByBoxIdAndCustomerIdIsNot(String boxId, String customerId);
+    List<Delivery> findAllByBoxIdAndCustomerIdIsNot(String boxId, String customerId);
 
-    Optional<List<Delivery>> findAllByDelivererId(String delivererId);
+    List<Delivery> findAllByIdIsNotAndBoxIdAndCustomerIdIsNot(String id, String boxId, String customerId);
 
-    Optional<List<Delivery>> findAllByCustomerId(String customerId);
+    List<Delivery> findAllByDelivererId(String delivererId);
 
-    Optional<List<Delivery>> findAllByCustomerIdAndDeliveryStatusIn(String customerId, List<String> deliveryStatus);
+    List<Delivery> findAllByCustomerId(String customerId);
+
+    List<Delivery> findAllByBoxIdAndCustomerIdAndDeliveryStatus(String boxId, String customerId, DeliveryStatus deliveryStatus);
+
+    List<Delivery> findAllByBoxIdAndDelivererIdAndDeliveryStatus(String boxId, String delivererId, DeliveryStatus deliveryStatus);
+
+    List<Delivery> findAllByCustomerIdAndDeliveryStatusIn(String customerId, List<String> deliveryStatus);
 }

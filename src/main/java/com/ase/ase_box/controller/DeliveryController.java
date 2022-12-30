@@ -24,6 +24,10 @@ public class DeliveryController {
 
     @PostMapping("/create")
     public ResponseEntity<CreateDeliveryResponse> createDelivery(@RequestBody CreateDeliveryRequest createDeliveryRequest){
+        /*
+            TODO: 30.12.2022 The creation of delivery should be allowed for a second customer if the first customer is
+            done with the box.
+         */
         return ResponseEntity.ok(deliveryCrudService.createDelivery(createDeliveryRequest));
     }
 
@@ -42,9 +46,9 @@ public class DeliveryController {
         return ResponseEntity.ok(deliveryCrudService.deleteDelivery(id));
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<UpdateDeliveryResponse> updateDelivery(@RequestBody UpdateDeliveryRequest updateDeliveryRequest){
-        return ResponseEntity.ok(deliveryCrudService.updateDelivery(updateDeliveryRequest));
+    @PutMapping("/update/{id}")
+    public ResponseEntity<UpdateDeliveryResponse> updateDelivery(@PathVariable("id") String id, @RequestBody UpdateDeliveryRequest updateDeliveryRequest){
+        return ResponseEntity.ok(deliveryCrudService.updateDelivery(id, updateDeliveryRequest));
     }
 
     @GetMapping("list/deliverer/{delivererId}")

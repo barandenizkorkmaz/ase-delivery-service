@@ -1,7 +1,9 @@
 package com.ase.ase_box.service.box;
 
 import com.ase.ase_box.data.entity.Box;
+import com.ase.ase_box.data.entity.Delivery;
 import com.ase.ase_box.data.request.box.IsCreateBoxValidRequest;
+import com.ase.ase_box.data.request.box.IsUpdateBoxValidRequest;
 import com.ase.ase_box.repository.BoxRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -41,12 +43,14 @@ public class BoxEntityService implements IBoxEntityService {
 
     @Override
     public boolean isCreateBoxValid(IsCreateBoxValidRequest isCreateBoxValidRequest) {
-        Optional<List<Box>> entity = boxRepository.findAllByNameOrRaspberryId(isCreateBoxValidRequest.getName(), isCreateBoxValidRequest.getRaspberryId());
-        if(entity.isPresent()){
-            List<Box> boxes = entity.get();
-            return boxes.isEmpty();
-        }
-        return true;
+        return boxRepository.findAllByNameOrRaspberryId(isCreateBoxValidRequest.getName(), isCreateBoxValidRequest.getRaspberryId())
+                .isEmpty();
     }
 
+    @Override
+    public boolean isUpdateBoxValid(String id, IsUpdateBoxValidRequest isUpdateBoxValidRequest) {
+        return boxRepository.customFindAllByNameOrRaspberryIdAndNoMatchingId(id, isUpdateBoxValidRequest.getName(), isUpdateBoxValidRequest.getRaspberryId())
+                .isEmpty();
+
+    }
 }

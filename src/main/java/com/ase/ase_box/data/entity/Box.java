@@ -27,6 +27,7 @@ public class Box extends BaseEntity {
     @Column(unique = true)
     private String raspberryId;
 
+    // TODO: unique validators don't work but logic is already implemented inside the service.
     @Column(unique = true)
     private String name;
 }

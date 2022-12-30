@@ -3,9 +3,7 @@ package com.ase.ase_box.service.box;
 import com.ase.ase_box.data.dto.BoxDto;
 import com.ase.ase_box.data.entity.Box;
 import com.ase.ase_box.data.entity.Delivery;
-import com.ase.ase_box.data.request.box.CreateBoxRequest;
-import com.ase.ase_box.data.request.box.IsCreateBoxValidRequest;
-import com.ase.ase_box.data.request.box.UpdateBoxRequest;
+import com.ase.ase_box.data.request.box.*;
 import com.ase.ase_box.data.request.delivery.IsCreateDeliveryValidRequest;
 import com.ase.ase_box.data.response.box.CreateBoxResponse;
 import com.ase.ase_box.data.response.box.DeleteBoxResponse;
@@ -13,7 +11,9 @@ import com.ase.ase_box.data.response.box.UpdateBoxResponse;
 import com.ase.ase_box.data.response.delivery.CreateDeliveryResponse;
 import com.ase.ase_box.data.response.delivery.DeleteDeliveryResponse;
 import com.ase.ase_box.data.response.delivery.UpdateDeliveryResponse;
+import com.ase.ase_box.service.delivery.DeliveryCrudService;
 import com.ase.ase_box.service.delivery.IDeliveryCrudService;
+import com.ase.ase_box.service.delivery.IDeliveryEntityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +27,7 @@ import static com.ase.ase_box.data.mapper.DeliveryMapper.DELIVERY_MAPPER;
 public class BoxCrudService implements IBoxCrudService {
 
     private final IBoxEntityService boxEntityService;
+    private final IDeliveryEntityService deliveryEntityService;
 
     @Override
     public CreateBoxResponse createBox(CreateBoxRequest createBoxRequest) {
@@ -71,8 +72,9 @@ public class BoxCrudService implements IBoxCrudService {
 
     @Override
     public UpdateBoxResponse updateBox(String id, UpdateBoxRequest updateBoxRequest) {
-        boolean isValid = boxEntityService.isCreateBoxValid(
-                IsCreateBoxValidRequest.builder()
+        boolean isValid = boxEntityService.isUpdateBoxValid(
+                id,
+                IsUpdateBoxValidRequest.builder()
                         .name(updateBoxRequest.getName())
                         .raspberryId(updateBoxRequest.getRaspberryId())
                         .build()
@@ -87,5 +89,18 @@ public class BoxCrudService implements IBoxCrudService {
                 .builder()
                 .isSuccessful(isValid)
                 .build();
+    }
+
+    @Override
+    public void unlockBox(String id, BoxRequest unlockBoxRequest) throws IllegalAccessException {
+        boolean isAuthorized = deliveryEntityService.isBoxUnlockAuthorized(id, unlockBoxRequest.getRfid());
+        if (!isAuthorized){
+            throw new IllegalAccessException();
+        }
+    }
+
+    @Override
+    public void lockBox(String id, BoxRequest lockRequest) throws IllegalAccessException {
+        deliveryEntityService.updateDeliveriesByLockRequest(id, lockRequest.getRfid());
     }
 }

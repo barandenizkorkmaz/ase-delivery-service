@@ -16,7 +16,7 @@ public interface IDeliveryCrudService {
 
     CreateDeliveryResponse createDelivery(CreateDeliveryRequest createDeliveryRequest);
 
-    UpdateDeliveryResponse updateDelivery(UpdateDeliveryRequest updateDeliveryRequest);
+    UpdateDeliveryResponse updateDelivery(String id, UpdateDeliveryRequest updateDeliveryRequest);
 
     DeleteDeliveryResponse deleteDelivery(String deliveryId);
 

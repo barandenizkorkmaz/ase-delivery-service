@@ -2,8 +2,10 @@ package com.ase.ase_box.service.delivery;
 
 import com.ase.ase_box.data.dto.DeliveryDto;
 import com.ase.ase_box.data.entity.Delivery;
+import com.ase.ase_box.data.enums.UserType;
 import com.ase.ase_box.data.request.delivery.CreateDeliveryRequest;
 import com.ase.ase_box.data.request.delivery.IsCreateDeliveryValidRequest;
+import com.ase.ase_box.data.request.delivery.IsUpdateDeliveryValidRequest;
 import com.ase.ase_box.data.request.delivery.UpdateDeliveryRequest;
 import com.ase.ase_box.data.response.delivery.CreateDeliveryResponse;
 import com.ase.ase_box.data.response.delivery.DeleteDeliveryResponse;
@@ -33,8 +35,15 @@ public interface IDeliveryEntityService {
 
     boolean isCreateDeliveryValid(IsCreateDeliveryValidRequest isCreateDeliveryValidRequest);
 
-    // TODO: 18.11.2022 Update - Delete delivery should be added.
+    boolean isUpdateDeliveryValid(String id, IsUpdateDeliveryValidRequest isUpdateDeliveryValidRequest);
+
     void deleteDeliveryById(String id);
+
+    boolean isBoxUnlockAuthorized(String boxId, String rfId);
+
+    UserType getUserTypeByRfid(String rfId);
+
+    void updateDeliveriesByLockRequest(String boxId, String rfId) throws IllegalAccessException;
 
 
 }
