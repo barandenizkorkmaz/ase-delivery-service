@@ -1,4 +1,4 @@
-package com.ase.ase_box.data.dto;
+package com.ase.ase_box.data.request.box;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,9 +9,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 @NoArgsConstructor
-public class BoxDto {
-    private String id;
-    private String address;
-    private String raspberryId;
+public class CreateBoxRequest {
     private String name;
+    private String raspberryId;
+    private String address;
 }

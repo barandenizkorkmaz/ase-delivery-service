@@ -2,7 +2,7 @@ package com.ase.ase_box.data.mapper;
 
 import com.ase.ase_box.data.dto.BoxDto;
 import com.ase.ase_box.data.entity.Box;
-import com.ase.ase_box.data.request.box.AddBoxRequest;
+import com.ase.ase_box.data.request.box.CreateBoxRequest;
 import com.ase.ase_box.data.request.box.UpdateBoxRequest;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
@@ -15,7 +15,7 @@ public interface BoxMapper {
 
     BoxMapper BOX_MAPPER = Mappers.getMapper(BoxMapper.class);
 
-    Box createBox(AddBoxRequest addBoxRequest);
+    Box createBox(CreateBoxRequest createBoxRequest);
 
     BoxDto convertToBoxDto(Box box);
 

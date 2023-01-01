@@ -1,27 +1,28 @@
 package com.ase.ase_box.service.box;
 
 import com.ase.ase_box.data.dto.BoxDto;
-import com.ase.ase_box.data.request.box.AddBoxRequest;
+import com.ase.ase_box.data.request.box.BoxRequest;
+import com.ase.ase_box.data.request.box.CreateBoxRequest;
 import com.ase.ase_box.data.request.box.UpdateBoxRequest;
-import com.ase.ase_box.data.request.delivery.AddDeliveryToBoxStatusRequest;
-import com.ase.ase_box.data.request.delivery.TakeDeliveryFromBoxRequest;
-import com.ase.ase_box.data.response.BoxStatusResponse;
+import com.ase.ase_box.data.response.box.CreateBoxResponse;
+import com.ase.ase_box.data.response.box.DeleteBoxResponse;
+import com.ase.ase_box.data.response.box.UpdateBoxResponse;
 
 import java.util.List;
 
 public interface IBoxCrudService {
 
-    BoxDto createBox(AddBoxRequest addBoxRequest);
+    CreateBoxResponse createBox(CreateBoxRequest createBoxRequest);
 
-    BoxDto updateBox(String boxId, UpdateBoxRequest updateBoxRequest);
+    UpdateBoxResponse updateBox(String id, UpdateBoxRequest updateBoxRequest);
 
-    BoxStatusResponse addDeliveryToBoxStatus(AddDeliveryToBoxStatusRequest addDeliveryToBoxStatusRequest);
-
-    BoxStatusResponse takeDeliveryFromBox(TakeDeliveryFromBoxRequest takeDeliveryFromBoxRequest);
-
-    void deleteBoxById(String boxId); // TODO: 13.11.2022 User auth has to be checked
+    DeleteBoxResponse deleteBox(String id);
 
     BoxDto getBoxById(String boxId);
 
     List<BoxDto> getAllBoxes();
+
+    void unlockBox(String id, BoxRequest unlockBoxRequest) throws IllegalAccessException;
+
+    void lockBox(String id, BoxRequest lockRequest) throws IllegalAccessException;
 }

@@ -1,16 +1,14 @@
-package com.ase.ase_box.data.request.box;
+package com.ase.ase_box.data.response.delivery;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Data
 @Builder
 @AllArgsConstructor
-@Data
 @NoArgsConstructor
-public class AddBoxRequest {
-    private String name;
-    private String raspberryId;
-    private String address;
+public class CreateDeliveryResponse {
+    boolean isSuccessful;
 }

@@ -1,19 +1,38 @@
 package com.ase.ase_box.service.delivery;
 
+import com.ase.ase_box.data.dto.DeliveryDto;
 import com.ase.ase_box.data.entity.Delivery;
-import com.ase.ase_box.data.request.delivery.AddDeliveryRequest;
-import com.ase.ase_box.data.request.delivery.CheckDeliveryIsExistRequest;
-import com.ase.ase_box.data.request.delivery.FinishDeliveryRequest;
+import com.ase.ase_box.data.request.delivery.AttemptDeliveryRequest;
+import com.ase.ase_box.data.request.delivery.CreateDeliveryRequest;
+import com.ase.ase_box.data.request.delivery.IsCreateDeliveryValidRequest;
+import com.ase.ase_box.data.request.delivery.UpdateDeliveryRequest;
+import com.ase.ase_box.data.response.delivery.CreateDeliveryResponse;
+import com.ase.ase_box.data.response.delivery.DeleteDeliveryResponse;
+import com.ase.ase_box.data.response.delivery.UpdateDeliveryResponse;
+
+import java.util.List;
 
 public interface IDeliveryCrudService {
 
-    Delivery saveDelivery(AddDeliveryRequest addDeliveryRequest);
+    CreateDeliveryResponse createDelivery(CreateDeliveryRequest createDeliveryRequest);
 
-    Delivery getDelivery(String deliveryId);
+    UpdateDeliveryResponse updateDelivery(String id, UpdateDeliveryRequest updateDeliveryRequest);
 
-    Delivery checkDeliveryIsExist(CheckDeliveryIsExistRequest checkDeliveryIsExistRequest);
+    DeleteDeliveryResponse deleteDelivery(String deliveryId);
 
-    Delivery finishDelivery(FinishDeliveryRequest finishDeliveryRequest);
+    DeliveryDto getDelivery(String deliveryId);
 
-    // TODO: 18.11.2022 Update - Delete delivery should be added.
+    List<DeliveryDto> getDeliveries();
+
+    List<DeliveryDto> getDeliveriesByDelivererId(String delivererId);
+
+    List<DeliveryDto> getDeliveriesByCustomerId(String customerId);
+
+    List<DeliveryDto> getActiveDeliveriesByCustomerId(String customerId);
+
+    List<DeliveryDto> getPastDeliveriesByCustomerId(String customerId);
+
+    void attemptDelivery(AttemptDeliveryRequest attemptDeliveryRequest) throws IllegalAccessException;
+
+
 }
