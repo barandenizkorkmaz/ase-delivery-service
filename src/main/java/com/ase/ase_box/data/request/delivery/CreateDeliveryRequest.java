@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class FinishDeliveryRequest {
-    private String userId;
-    private String delivererId;
+public class CreateDeliveryRequest {
     private String boxId;
+    private String delivererId;
+    private String customerId;
 }

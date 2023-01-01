@@ -1,4 +1,4 @@
-package com.ase.ase_box.data.request.delivery;
+package com.ase.ase_box.data.request.box;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,10 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class AddDeliveryRequest {
-    private String boxId;
-
-    private String delivererId;
-
-    private String userId;
+public class IsUpdateBoxValidRequest {
+    private String name;
+    private String raspberryId;
 }

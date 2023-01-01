@@ -1,6 +1,5 @@
-package com.ase.ase_box.data.response.box;
+package com.ase.ase_box.data.request.box;
 
-import com.ase.ase_box.data.enums.BoxStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class BoxStatusResponse {
-
-    private BoxStatus boxStatus;
+public class IsCreateBoxValidRequest {
+    private String name;
+    private String raspberryId;
 }

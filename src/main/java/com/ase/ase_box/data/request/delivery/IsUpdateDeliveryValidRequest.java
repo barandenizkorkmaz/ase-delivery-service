@@ -9,9 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CheckDeliveryIsExistRequest {
-
-    private String delivererId;
-    private String userId;
+public class IsUpdateDeliveryValidRequest {
     private String boxId;
+    private String customerId;
 }

@@ -14,13 +14,11 @@ import javax.persistence.Enumerated;
 @NoArgsConstructor
 @Builder
 public class UpdateDeliveryRequest {
-    private String id;
-
     private String boxId;
 
     private String delivererId;
 
-    private String userId;
+    private String customerId;
 
     @Enumerated(EnumType.STRING)
     private DeliveryStatus deliveryStatus;
