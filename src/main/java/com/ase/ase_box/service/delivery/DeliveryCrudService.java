@@ -1,20 +1,19 @@
 package com.ase.ase_box.service.delivery;
 
-import com.ase.ase_box.data.dto.DeliveryDto;
 import com.ase.ase_box.data.entity.Delivery;
 import com.ase.ase_box.data.enums.DeliveryStatus;
-import com.ase.ase_box.data.request.delivery.AddDeliveryRequest;
-import com.ase.ase_box.data.request.delivery.CheckDeliveryIsExistRequest;
-import com.ase.ase_box.data.request.delivery.FinishDeliveryRequest;
+import com.ase.ase_box.data.request.delivery.*;
 import com.ase.ase_box.repository.DeliveryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 import static com.ase.ase_box.data.mapper.DeliveryMapper.DELIVERY_MAPPER;
 
 @Service
 @RequiredArgsConstructor
-public class DeliveryCrudService implements IDeliveryCrudService{
+public class DeliveryCrudService implements IDeliveryCrudService {
 
     private final DeliveryRepository deliveryRepository;
 
@@ -49,5 +48,26 @@ public class DeliveryCrudService implements IDeliveryCrudService{
         ).orElseThrow(IllegalArgumentException::new);
         delivery.setDeliveryState(DeliveryStatus.DELIVERED);
         return deliveryRepository.save(delivery);
+    }
+
+    @Override
+    public List<Delivery> getAllDeliveries() {
+        return deliveryRepository.findAll();
+    }
+
+    @Override
+    public List<Delivery> getByDelivererIdAndDeliveryState(GetDeliveryListByDelivererIdAndDeliveryState getDeliveryListByDelivererIdAndDeliveryState) {
+        return deliveryRepository.findByDelivererIdAndDeliveryState(
+                getDeliveryListByDelivererIdAndDeliveryState.getDelivererId(),
+                getDeliveryListByDelivererIdAndDeliveryState.getDeliveryState().toString()
+        ).orElseThrow(IllegalAccessError::new);
+    }
+
+    @Override
+    public List<Delivery> getByUserIdAndDeliveryState(GetDeliveryListByCustomerIdAndDeliveryState getDeliveryListByCustomerIdAndDeliveryState) {
+        return deliveryRepository.findByUserIdAndDeliveryState(
+                getDeliveryListByCustomerIdAndDeliveryState.getUserId(),
+                getDeliveryListByCustomerIdAndDeliveryState.getDeliveryState().toString()
+        ).orElseThrow(IllegalAccessError::new);
     }
 }

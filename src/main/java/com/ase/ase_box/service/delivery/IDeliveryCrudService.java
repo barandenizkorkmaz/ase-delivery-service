@@ -1,9 +1,9 @@
 package com.ase.ase_box.service.delivery;
 
 import com.ase.ase_box.data.entity.Delivery;
-import com.ase.ase_box.data.request.delivery.AddDeliveryRequest;
-import com.ase.ase_box.data.request.delivery.CheckDeliveryIsExistRequest;
-import com.ase.ase_box.data.request.delivery.FinishDeliveryRequest;
+import com.ase.ase_box.data.request.delivery.*;
+
+import java.util.List;
 
 public interface IDeliveryCrudService {
 
@@ -15,5 +15,10 @@ public interface IDeliveryCrudService {
 
     Delivery finishDelivery(FinishDeliveryRequest finishDeliveryRequest);
 
-    // TODO: 18.11.2022 Update - Delete delivery should be added.
+    List<Delivery> getAllDeliveries();
+
+    List<Delivery> getByDelivererIdAndDeliveryState(GetDeliveryListByDelivererIdAndDeliveryState getDeliveryListByDelivererIdAndDeliveryState);
+
+    List<Delivery> getByUserIdAndDeliveryState(GetDeliveryListByCustomerIdAndDeliveryState getDeliveryListByCustomerIdAndDeliveryState);
+
 }
