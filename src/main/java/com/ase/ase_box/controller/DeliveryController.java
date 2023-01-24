@@ -15,12 +15,17 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RequestMapping("delivery")
+@RequestMapping("/delivery")
 @RequiredArgsConstructor
 @RestController
 public class DeliveryController {
 
     private final DeliveryCrudService deliveryCrudService;
+
+    @GetMapping("")
+    public ResponseEntity<HttpStatus> startSession(){
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
     @PostMapping("/create")
     public ResponseEntity<CreateDeliveryResponse> createDelivery(@RequestBody CreateDeliveryRequest createDeliveryRequest){
