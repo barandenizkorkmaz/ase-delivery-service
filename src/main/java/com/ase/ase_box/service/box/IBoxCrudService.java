@@ -22,6 +22,8 @@ public interface IBoxCrudService {
 
     List<BoxDto> getAllBoxes();
 
+    List<BoxDto> getBoxesByDelivererEmail(String email) throws Exception;
+
     void unlockBox(String id, BoxRequest unlockBoxRequest) throws IllegalAccessException;
 
     void lockBox(String id, BoxRequest lockRequest) throws IllegalAccessException;

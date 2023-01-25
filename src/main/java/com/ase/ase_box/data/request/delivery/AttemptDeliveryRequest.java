@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class AttemptDeliveryRequest {
-    private String candidateDelivererId;
+    private String candidateDelivererEmail;
     private String deliveryId;
 }

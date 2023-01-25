@@ -11,5 +11,5 @@ import lombok.NoArgsConstructor;
 @Builder
 public class IsUpdateDeliveryValidRequest {
     private String boxId;
-    private String customerId;
+    private String customerEmail;
 }

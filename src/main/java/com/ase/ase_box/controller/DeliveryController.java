@@ -27,7 +27,7 @@ public class DeliveryController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PostMapping("/create")
+    @PostMapping("/create")  // TODO: 25.01.2023 Distpacher
     public ResponseEntity<CreateDeliveryResponse> createDelivery(@RequestBody CreateDeliveryRequest createDeliveryRequest){
         /*
             TODO: 30.12.2022 The creation of delivery should be allowed for a second customer if the first customer is
@@ -40,17 +40,17 @@ public class DeliveryController {
         }
     }
 
-    @GetMapping("/list/{id}")
+    @GetMapping("/list/{id}")  // TODO: 25.01.2023 Distpacher
     public ResponseEntity<DeliveryDto> getDelivery(@PathVariable("id") String id){
         return ResponseEntity.ok(deliveryCrudService.getDelivery(id));
     }
 
-    @GetMapping("/list/dispatcher/all")
+    @GetMapping("/list/dispatcher/all")  // TODO: 25.01.2023 Distpacher
     public ResponseEntity<List<DeliveryDto>> getDeliveries(){
         return ResponseEntity.ok(deliveryCrudService.getDeliveries());
     }
 
-    @PostMapping("/delete/{id}")
+    @PostMapping("/delete/{id}")  // TODO: 25.01.2023 Distpacher
     public ResponseEntity<DeleteDeliveryResponse> deleteDelivery(@PathVariable("id") String id){
         try{
             return ResponseEntity.ok(deliveryCrudService.deleteDelivery(id));
@@ -59,7 +59,7 @@ public class DeliveryController {
         }
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping("/update/{id}")  // TODO: 25.01.2023 Distpacher
     public ResponseEntity<UpdateDeliveryResponse> updateDelivery(@PathVariable("id") String id, @RequestBody UpdateDeliveryRequest updateDeliveryRequest){
         try {
             return ResponseEntity.ok(deliveryCrudService.updateDelivery(id, updateDeliveryRequest));
@@ -68,27 +68,27 @@ public class DeliveryController {
         }
     }
 
-    @GetMapping("list/deliverer/{delivererId}")
+    @GetMapping("list/deliverer/{delivererId}")  // TODO: 25.01.2023 Deliverer
     public ResponseEntity<List<DeliveryDto>> getDeliveriesByDeliverer(@PathVariable("delivererId") String delivererId){
         return ResponseEntity.ok(deliveryCrudService.getDeliveriesByDelivererId(delivererId));
     }
 
-    @GetMapping("list/customer/all/{customerId}")
+    @GetMapping("list/customer/all/{customerId}")  // TODO: 25.01.2023 Customer
     public ResponseEntity<List<DeliveryDto>> getDeliveriesByCustomer(@PathVariable("customerId") String customerId){
         return ResponseEntity.ok(deliveryCrudService.getDeliveriesByCustomerId(customerId));
     }
 
-    @GetMapping("list/customer/active/{customerId}")
+    @GetMapping("list/customer/active/{customerId}")  // TODO: 25.01.2023 Customer
     public ResponseEntity<List<DeliveryDto>> getActiveDeliveriesByCustomer(@PathVariable("customerId") String customerId){
         return ResponseEntity.ok(deliveryCrudService.getActiveDeliveriesByCustomerId(customerId));
     }
 
-    @GetMapping("list/customer/past/{customerId}")
+    @GetMapping("list/customer/past/{customerId}")  // TODO: 25.01.2023 Customer
     public ResponseEntity<List<DeliveryDto>> getPastDeliveriesByCustomer(@PathVariable("customerId") String customerId){
         return ResponseEntity.ok(deliveryCrudService.getPastDeliveriesByCustomerId(customerId));
     }
 
-    @PostMapping("/attempt")
+    @PostMapping("/attempt")   // TODO: 25.01.2023 Deliverer
     public ResponseEntity<HttpStatus> attemptDelivery(@RequestBody AttemptDeliveryRequest attemptDeliveryRequest){
         try{
             deliveryCrudService.attemptDelivery(attemptDeliveryRequest);
@@ -97,5 +97,6 @@ public class DeliveryController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
+
 
 }

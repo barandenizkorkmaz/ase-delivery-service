@@ -19,6 +19,8 @@ public interface IBoxEntityService {
 
     List<Box> getAllBoxes();
 
+    List<Box> getAllBoxesByDelivererEmail(String email)  throws Exception ;
+
     boolean isBoxExists(String id);
 
     boolean isCreateBoxValid(IsCreateBoxValidRequest isCreateBoxValidRequest);

@@ -23,22 +23,23 @@ public class BoxController {
 
     private final IBoxCrudService boxCrudService;
 
-    @PostMapping("/create")
+    @PostMapping("/create") // TODO: 25.01.2023 Distpacher
     public ResponseEntity<CreateBoxResponse> createBox(@RequestBody CreateBoxRequest createBoxRequest) {
         return ResponseEntity.ok(boxCrudService.createBox(createBoxRequest));
     }
 
-    @GetMapping("list/{id}")
+    @GetMapping("list/{id}")   // TODO: 25.01.2023 Distpacher
+    //@PreAuthorize("hasAuthority('" + UserType.DISPATCHER + "')")
     public ResponseEntity<BoxDto> getBoxById(@PathVariable("id") String id) {
         return ResponseEntity.ok(boxCrudService.getBoxById(id));
     }
 
-    @GetMapping("list/all")
+    @GetMapping("list/all") // TODO: 25.01.2023 Distpacher
     public ResponseEntity<List<BoxDto>> getAllBoxes() {
         return ResponseEntity.ok(boxCrudService.getAllBoxes());
     }
 
-    @PutMapping("update/{id}")
+    @PutMapping("update/{id}") // TODO: 25.01.2023 Distpacher
     public ResponseEntity<UpdateBoxResponse> updateBox(@PathVariable("id") String id, @RequestBody UpdateBoxRequest updateBoxRequest) {
         try {
             return ResponseEntity.ok(boxCrudService.updateBox(id, updateBoxRequest));
@@ -47,12 +48,21 @@ public class BoxController {
         }
     }
 
-    @PostMapping("delete/{id}")
+    @PostMapping("delete/{id}") // TODO: 25.01.2023 Distpacher
     public ResponseEntity<DeleteBoxResponse> deleteBox(@PathVariable("id") String id) {
         try {
             return ResponseEntity.ok(boxCrudService.deleteBox(id));
         }catch (Exception e){
             return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @GetMapping("/deliverer/{email}") // TODO: 25.01.2023 Deliverer
+    public ResponseEntity<List<BoxDto>> getBoxes(@PathVariable("email") String email){
+        try {
+            return ResponseEntity.ok(boxCrudService.getBoxesByDelivererEmail(email));
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 

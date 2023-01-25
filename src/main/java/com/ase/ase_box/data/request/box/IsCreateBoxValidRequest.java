@@ -11,5 +11,5 @@ import lombok.NoArgsConstructor;
 @Builder
 public class IsCreateBoxValidRequest {
     private String name;
-    private String raspberryId;
+    private String id;
 }

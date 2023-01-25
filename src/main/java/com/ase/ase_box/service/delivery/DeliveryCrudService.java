@@ -1,9 +1,6 @@
 package com.ase.ase_box.service.delivery;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 
 import com.ase.ase_box.data.dto.DeliveryDto;
 import com.ase.ase_box.data.entity.Delivery;
@@ -15,7 +12,6 @@ import com.ase.ase_box.data.response.delivery.UpdateDeliveryResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import static com.ase.ase_box.data.mapper.BoxMapper.BOX_MAPPER;
 import static com.ase.ase_box.data.mapper.DeliveryMapper.DELIVERY_MAPPER;
 
 @Service
@@ -28,7 +24,7 @@ public class DeliveryCrudService implements IDeliveryCrudService{
         boolean isValid = deliveryEntityService.isCreateDeliveryValid(
                 IsCreateDeliveryValidRequest.builder()
                         .boxId(createDeliveryRequest.getBoxId())
-                        .customerId(createDeliveryRequest.getCustomerId())
+                        .customerEmail(createDeliveryRequest.getCustomerEmail())
                         .build()
         );
         if(isValid){
@@ -63,7 +59,7 @@ public class DeliveryCrudService implements IDeliveryCrudService{
                 id,
                 IsUpdateDeliveryValidRequest.builder()
                         .boxId(updateDeliveryRequest.getBoxId())
-                        .customerId(updateDeliveryRequest.getCustomerId())
+                        .customerEmail(updateDeliveryRequest.getCustomerEmail())
                         .build()
         );
         if(isValid){
@@ -116,7 +112,7 @@ public class DeliveryCrudService implements IDeliveryCrudService{
     public void attemptDelivery(AttemptDeliveryRequest attemptDeliveryRequest) throws IllegalAccessException {
         Delivery delivery = deliveryEntityService.getDeliveryById(attemptDeliveryRequest.getDeliveryId())
                 .orElseThrow(IllegalArgumentException::new);
-        if(delivery.getDelivererId().equals(attemptDeliveryRequest.getCandidateDelivererId()) && delivery.getDeliveryStatus().equals(DeliveryStatus.DISPATCHED)){
+        if(delivery.getDelivererEmail().equals(attemptDeliveryRequest.getCandidateDelivererEmail()) && delivery.getDeliveryStatus().equals(DeliveryStatus.DISPATCHED)){
             delivery.setDeliveryStatus(DeliveryStatus.SHIPPING);
             deliveryEntityService.updateDelivery(delivery);
         }

@@ -26,7 +26,7 @@ public class BoxCrudService implements IBoxCrudService {
         boolean isValid = boxEntityService.isCreateBoxValid(
                 IsCreateBoxValidRequest.builder()
                         .name(createBoxRequest.getName())
-                        .raspberryId(createBoxRequest.getRaspberryId())
+                        .id(createBoxRequest.getId())
                         .build()
         );
         if(isValid){
@@ -64,13 +64,17 @@ public class BoxCrudService implements IBoxCrudService {
                 .build();
     }
 
+    public List<BoxDto> getBoxesByDelivererEmail(String email) throws Exception {
+        return BOX_MAPPER.convertToBoxDtoList(boxEntityService.getAllBoxesByDelivererEmail(email));
+    }
+
     @Override
     public UpdateBoxResponse updateBox(String id, UpdateBoxRequest updateBoxRequest) throws Exception {
         boolean isValid = boxEntityService.isUpdateBoxValid(
                 id,
                 IsUpdateBoxValidRequest.builder()
                         .name(updateBoxRequest.getName())
-                        .raspberryId(updateBoxRequest.getRaspberryId())
+                        .id(updateBoxRequest.getId())
                         .build()
         );
         if(isValid){
