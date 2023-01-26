@@ -4,10 +4,13 @@ import com.ase.ase_box.data.entity.Delivery;
 import com.ase.ase_box.data.enums.DeliveryStatus;
 import com.ase.ase_box.data.enums.UserType;
 import com.ase.ase_box.data.request.delivery.CreateDeliveryRequest;
+import com.ase.ase_box.data.request.notification.SendMailRequest;
 import com.ase.ase_box.repository.DeliveryRepository;
+import com.ase.ase_box.service.notification.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -20,6 +23,7 @@ public class DeliveryEntityService implements IDeliveryEntityService{
 
 
     private final DeliveryRepository deliveryRepository;
+    private final NotificationService notificationService;
 
     @Override
     public Delivery saveDelivery(CreateDeliveryRequest createDeliveryRequest) {
@@ -127,8 +131,9 @@ public class DeliveryEntityService implements IDeliveryEntityService{
     public void updateDeliveriesByLockRequest(String boxId, String rfId) throws IllegalAccessException {
         // Note that rfid is equal to user email.
         UserType userType = getUserTypeByRfid(rfId);
+        List<Delivery> deliveries = new ArrayList<>();
         if(userType.equals(UserType.CUSTOMER)){
-            List<Delivery> deliveries = deliveryRepository.findAllByBoxIdAndCustomerEmailAndDeliveryStatus(
+            deliveries = deliveryRepository.findAllByBoxIdAndCustomerEmailAndDeliveryStatus(
                     boxId,
                     rfId,
                     DeliveryStatus.DELIVERED
@@ -140,7 +145,7 @@ public class DeliveryEntityService implements IDeliveryEntityService{
             }
         }
         else if(userType.equals(UserType.DELIVERER)){
-            List<Delivery> deliveries = deliveryRepository.findAllByBoxIdAndDelivererEmailAndDeliveryStatus(
+            deliveries = deliveryRepository.findAllByBoxIdAndDelivererEmailAndDeliveryStatus(
                     boxId,
                     rfId,
                     DeliveryStatus.SHIPPING
@@ -154,6 +159,13 @@ public class DeliveryEntityService implements IDeliveryEntityService{
         else{
             throw new IllegalAccessException();
         }
-        // TODO: Send email notifications for each delivery in deliveries list.
+        for (Delivery delivery: deliveries) {
+            notificationService.sendMail(
+                    SendMailRequest.builder()
+                            .content(delivery.getDeliveryStatus().name())
+                            .receiver(delivery.getCustomerEmail())
+                            .build()
+            );
+        }
     }
 }

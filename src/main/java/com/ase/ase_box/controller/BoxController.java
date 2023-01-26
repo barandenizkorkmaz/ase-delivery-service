@@ -1,6 +1,7 @@
 package com.ase.ase_box.controller;
 
 import com.ase.ase_box.data.dto.BoxDto;
+import com.ase.ase_box.data.enums.UserType;
 import com.ase.ase_box.data.request.box.BoxRequest;
 import com.ase.ase_box.data.request.box.CreateBoxRequest;
 import com.ase.ase_box.data.request.box.UpdateBoxRequest;
@@ -11,8 +12,10 @@ import com.ase.ase_box.service.box.IBoxCrudService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.RolesAllowed;
 import java.util.List;
 
 @RestController
@@ -29,6 +32,7 @@ public class BoxController {
     }
 
     @PostMapping("/create") // TODO: 25.01.2023 Distpacher
+    @RolesAllowed("DISPATCHER")
     public ResponseEntity<CreateBoxResponse> createBox(@RequestBody CreateBoxRequest createBoxRequest) {
         try {
             return ResponseEntity.ok(boxCrudService.createBox(createBoxRequest));
@@ -39,17 +43,19 @@ public class BoxController {
     }
 
     @GetMapping("list/{id}")   // TODO: 25.01.2023 Distpacher
-    //@PreAuthorize("hasAuthority('" + UserType.DISPATCHER + "')")
+    @RolesAllowed("DISPATCHER")
     public ResponseEntity<BoxDto> getBoxById(@PathVariable("id") String id) {
         return ResponseEntity.ok(boxCrudService.getBoxById(id));
     }
 
     @GetMapping("list/all") // TODO: 25.01.2023 Distpacher
+    @RolesAllowed("DISPATCHER")
     public ResponseEntity<List<BoxDto>> getAllBoxes() {
         return ResponseEntity.ok(boxCrudService.getAllBoxes());
     }
 
     @PutMapping("update/{id}") // TODO: 25.01.2023 Distpacher
+    @RolesAllowed("DISPATCHER")
     public ResponseEntity<UpdateBoxResponse> updateBox(@PathVariable("id") String id, @RequestBody UpdateBoxRequest updateBoxRequest) {
         try {
             return ResponseEntity.ok(boxCrudService.updateBox(id, updateBoxRequest));
@@ -59,6 +65,7 @@ public class BoxController {
     }
 
     @PostMapping("delete/{id}") // TODO: 25.01.2023 Distpacher
+    @RolesAllowed("DISPATCHER")
     public ResponseEntity<DeleteBoxResponse> deleteBox(@PathVariable("id") String id) {
         try {
             return ResponseEntity.ok(boxCrudService.deleteBox(id));
@@ -68,6 +75,7 @@ public class BoxController {
     }
 
     @GetMapping("/deliverer/{email}") // TODO: 25.01.2023 Deliverer
+    @RolesAllowed("DELIVERER")
     public ResponseEntity<List<BoxDto>> getBoxesByDelivererEmail(@PathVariable("email") String email){
         try {
             return ResponseEntity.ok(boxCrudService.getBoxesByDelivererEmail(email));
