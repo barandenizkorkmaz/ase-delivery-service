@@ -12,7 +12,7 @@ import java.util.List;
 
 public interface IBoxCrudService {
 
-    CreateBoxResponse createBox(CreateBoxRequest createBoxRequest);
+    CreateBoxResponse createBox(CreateBoxRequest createBoxRequest) throws Exception;
 
     UpdateBoxResponse updateBox(String id, UpdateBoxRequest updateBoxRequest) throws Exception;
 

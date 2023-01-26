@@ -8,17 +8,15 @@ import java.util.List;
 
 public interface DeliveryRepository extends MongoRepository<Delivery,String> {
 
-    List<Delivery> findAllByBoxIdAndCustomerEmailIsNot(String boxId, String customerId);
+    List<Delivery> findAllByDelivererEmail(String delivererEmail);
 
-    List<Delivery> findAllByIdIsNotAndBoxIdAndCustomerEmailIsNot(String id, String boxId, String customerId);
+    List<Delivery> findAllByCustomerEmail(String customerEmail);
 
-    List<Delivery> findAllByDelivererEmail(String delivererId);
+    List<Delivery> findAllByBoxIdAndCustomerEmailIsNotAndDeliveryStatusIsNot(String boxId, String customerEmail, DeliveryStatus deliveryStatus);
 
-    List<Delivery> findAllByCustomerEmail(String customerId);
+    List<Delivery> findAllByBoxIdAndCustomerEmailAndDeliveryStatus(String boxId, String customerEmail, DeliveryStatus deliveryStatus);
 
-    List<Delivery> findAllByBoxIdAndCustomerEmailAndDeliveryStatus(String boxId, String customerId, DeliveryStatus deliveryStatus);
+    List<Delivery> findAllByBoxIdAndDelivererEmailAndDeliveryStatus(String boxId, String delivererEmail, DeliveryStatus deliveryStatus);
 
-    List<Delivery> findAllByBoxIdAndDelivererEmailAndDeliveryStatus(String boxId, String delivererId, DeliveryStatus deliveryStatus);
-
-    List<Delivery> findAllByCustomerEmailAndDeliveryStatusIn(String customerId, List<String> deliveryStatus);
+    List<Delivery> findAllByCustomerEmailAndDeliveryStatusIn(String customerEmail, List<String> deliveryStatus);
 }

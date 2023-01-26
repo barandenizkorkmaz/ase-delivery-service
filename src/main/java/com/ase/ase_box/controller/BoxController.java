@@ -23,9 +23,19 @@ public class BoxController {
 
     private final IBoxCrudService boxCrudService;
 
+    @GetMapping("")
+    public ResponseEntity<HttpStatus> startSession(){
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     @PostMapping("/create") // TODO: 25.01.2023 Distpacher
     public ResponseEntity<CreateBoxResponse> createBox(@RequestBody CreateBoxRequest createBoxRequest) {
-        return ResponseEntity.ok(boxCrudService.createBox(createBoxRequest));
+        try {
+            return ResponseEntity.ok(boxCrudService.createBox(createBoxRequest));
+        }
+        catch (Exception e){
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @GetMapping("list/{id}")   // TODO: 25.01.2023 Distpacher
@@ -58,7 +68,7 @@ public class BoxController {
     }
 
     @GetMapping("/deliverer/{email}") // TODO: 25.01.2023 Deliverer
-    public ResponseEntity<List<BoxDto>> getBoxes(@PathVariable("email") String email){
+    public ResponseEntity<List<BoxDto>> getBoxesByDelivererEmail(@PathVariable("email") String email){
         try {
             return ResponseEntity.ok(boxCrudService.getBoxesByDelivererEmail(email));
         } catch (Exception e) {

@@ -22,10 +22,8 @@ public class DeliveryCrudService implements IDeliveryCrudService{
     @Override
     public CreateDeliveryResponse createDelivery(CreateDeliveryRequest createDeliveryRequest) throws Exception {
         boolean isValid = deliveryEntityService.isCreateDeliveryValid(
-                IsCreateDeliveryValidRequest.builder()
-                        .boxId(createDeliveryRequest.getBoxId())
-                        .customerEmail(createDeliveryRequest.getCustomerEmail())
-                        .build()
+                createDeliveryRequest.getBoxId(),
+                createDeliveryRequest.getCustomerEmail()
         );
         if(isValid){
             deliveryEntityService.saveDelivery(createDeliveryRequest);
@@ -56,11 +54,8 @@ public class DeliveryCrudService implements IDeliveryCrudService{
     @Override
     public UpdateDeliveryResponse updateDelivery(String id, UpdateDeliveryRequest updateDeliveryRequest) throws Exception {
         boolean isValid = deliveryEntityService.isUpdateDeliveryValid(
-                id,
-                IsUpdateDeliveryValidRequest.builder()
-                        .boxId(updateDeliveryRequest.getBoxId())
-                        .customerEmail(updateDeliveryRequest.getCustomerEmail())
-                        .build()
+                updateDeliveryRequest.getBoxId(),
+                updateDeliveryRequest.getCustomerEmail()
         );
         if(isValid){
             Delivery delivery = deliveryEntityService.getDeliveryById(id)

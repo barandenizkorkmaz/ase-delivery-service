@@ -29,10 +29,6 @@ public class DeliveryController {
 
     @PostMapping("/create")  // TODO: 25.01.2023 Distpacher
     public ResponseEntity<CreateDeliveryResponse> createDelivery(@RequestBody CreateDeliveryRequest createDeliveryRequest){
-        /*
-            TODO: 30.12.2022 The creation of delivery should be allowed for a second customer if the first customer is
-            done with the box.
-         */
         try {
             return ResponseEntity.ok(deliveryCrudService.createDelivery(createDeliveryRequest));
         }catch (Exception exception){

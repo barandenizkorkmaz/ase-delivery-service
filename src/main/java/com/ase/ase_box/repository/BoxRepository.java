@@ -8,10 +8,12 @@ import java.util.List;
 
 public interface BoxRepository extends MongoRepository<Box, String> {
 
-    List<Box> findAllByNameOrId(String name, String id);
+    List<Box> findAllByName(String name);
 
-    @Query("{'id': {'$ne' : ?0},'$or':[ {'name':?1}, {'raspberryId':?2} ]}")
-    List<Box> customFindAllByNameOrRaspberryIdAndNoMatchingId(String id, String name, String raspberryId);
+    List<Box> findAllByIdIsNotAndName(String id, String name);
+
+    //@Query("{'id': {'$ne' : ?0},'$or':[ {'name':?1}, {'raspberryId':?2} ]}")
+    //List<Box> customFindAllByNameOrRaspberryIdAndNoMatchingId(String id, String name, String raspberryId);
 
 
 
