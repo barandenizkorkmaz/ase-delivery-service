@@ -1,10 +1,8 @@
 package com.ase.ase_box.service.delivery;
 
 import com.ase.ase_box.data.dto.DeliveryDto;
-import com.ase.ase_box.data.entity.Delivery;
 import com.ase.ase_box.data.request.delivery.AttemptDeliveryRequest;
 import com.ase.ase_box.data.request.delivery.CreateDeliveryRequest;
-import com.ase.ase_box.data.request.delivery.IsCreateDeliveryValidRequest;
 import com.ase.ase_box.data.request.delivery.UpdateDeliveryRequest;
 import com.ase.ase_box.data.response.delivery.CreateDeliveryResponse;
 import com.ase.ase_box.data.response.delivery.DeleteDeliveryResponse;
@@ -32,7 +30,7 @@ public interface IDeliveryCrudService {
 
     List<DeliveryDto> getPastDeliveriesByCustomerId(String customerId);
 
-    void attemptDelivery(AttemptDeliveryRequest attemptDeliveryRequest) throws IllegalAccessException;
+    void attemptDelivery(String id, AttemptDeliveryRequest attemptDeliveryRequest) throws IllegalAccessException;
 
 
 }

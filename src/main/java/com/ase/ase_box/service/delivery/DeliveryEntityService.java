@@ -1,27 +1,17 @@
 package com.ase.ase_box.service.delivery;
 
-import com.ase.ase_box.data.dto.DeliveryDto;
-import com.ase.ase_box.data.entity.Box;
 import com.ase.ase_box.data.entity.Delivery;
 import com.ase.ase_box.data.enums.DeliveryStatus;
 import com.ase.ase_box.data.enums.UserType;
 import com.ase.ase_box.data.request.delivery.CreateDeliveryRequest;
-import com.ase.ase_box.data.request.delivery.IsCreateDeliveryValidRequest;
-import com.ase.ase_box.data.request.delivery.IsUpdateDeliveryValidRequest;
-import com.ase.ase_box.data.request.delivery.UpdateDeliveryRequest;
-import com.ase.ase_box.data.response.delivery.CreateDeliveryResponse;
-import com.ase.ase_box.data.response.delivery.DeleteDeliveryResponse;
-import com.ase.ase_box.data.response.delivery.UpdateDeliveryResponse;
 import com.ase.ase_box.repository.DeliveryRepository;
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.User;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static com.ase.ase_box.data.mapper.BoxMapper.BOX_MAPPER;
 import static com.ase.ase_box.data.mapper.DeliveryMapper.DELIVERY_MAPPER;
 
 @Service
@@ -57,17 +47,14 @@ public class DeliveryEntityService implements IDeliveryEntityService{
     }
 
     @Override
-    public boolean isCreateDeliveryValid(IsCreateDeliveryValidRequest isCreateDeliveryValidRequest) {
-        return deliveryRepository.findAllByBoxIdAndCustomerIdIsNot(isCreateDeliveryValidRequest.getBoxId(), isCreateDeliveryValidRequest.getCustomerId())
-                .isEmpty();
+    public boolean isCreateDeliveryValid(String boxId, String customerEmail) {
+        return deliveryRepository.findAllByBoxIdAndCustomerEmailIsNotAndDeliveryStatusIsNot(boxId, customerEmail, DeliveryStatus.COLLECTED).isEmpty();
     }
 
     @Override
-    public boolean isUpdateDeliveryValid(String id, IsUpdateDeliveryValidRequest isUpdateDeliveryValidRequest) {
-        return deliveryRepository.findAllByIdIsNotAndBoxIdAndCustomerIdIsNot(
-                id,
-                isUpdateDeliveryValidRequest.getBoxId(),
-                isUpdateDeliveryValidRequest.getCustomerId()
+    public boolean isUpdateDeliveryValid(String boxId, String customerEmail) {
+        return deliveryRepository.findAllByBoxIdAndCustomerEmailIsNotAndDeliveryStatusIsNot(
+                        boxId, customerEmail, DeliveryStatus.COLLECTED
                 )
                 .isEmpty();
     }
@@ -79,33 +66,34 @@ public class DeliveryEntityService implements IDeliveryEntityService{
 
     @Override
     public List<Delivery> getDeliveriesByDelivererId(String delivererId) {
-        return deliveryRepository.findAllByDelivererId(delivererId);
+        return deliveryRepository.findAllByDelivererEmail(delivererId);
     }
 
     @Override
     public List<Delivery> getDeliveriesByCustomerId(String customerId) {
-        return deliveryRepository.findAllByCustomerId(customerId);
+        return deliveryRepository.findAllByCustomerEmail(customerId);
     }
 
     @Override
     public List<Delivery> getActiveDeliveriesByCustomerId(String customerId) {
         String[] deliveryStatus = new String[] { DeliveryStatus.DISPATCHED.name(), DeliveryStatus.SHIPPING.name(), DeliveryStatus.DELIVERED.name() };
-        return deliveryRepository.findAllByCustomerIdAndDeliveryStatusIn(customerId, Arrays.asList(deliveryStatus));
+        return deliveryRepository.findAllByCustomerEmailAndDeliveryStatusIn(customerId, Arrays.asList(deliveryStatus));
     }
 
     @Override
     public List<Delivery> getPastDeliveriesByCustomerId(String customerId) {
         String[] deliveryStatus = new String[] { DeliveryStatus.COLLECTED.name() };
-        return deliveryRepository.findAllByCustomerIdAndDeliveryStatusIn(customerId, Arrays.asList(deliveryStatus));
+        return deliveryRepository.findAllByCustomerEmailAndDeliveryStatusIn(customerId, Arrays.asList(deliveryStatus));
     }
 
     @Override
     public boolean isBoxUnlockAuthorized(String boxId, String rfId) {
+        // Note that rfid is equal to user email.
         UserType userType = getUserTypeByRfid(rfId);
         if(userType != null){
             if(userType.equals(UserType.CUSTOMER)){
                 // If customer is assigned to the given box and at least one delivery is delivered, then return true.
-                return !deliveryRepository.findAllByBoxIdAndCustomerIdAndDeliveryStatus(
+                return !deliveryRepository.findAllByBoxIdAndCustomerEmailAndDeliveryStatus(
                         boxId,
                         rfId,
                         DeliveryStatus.DELIVERED
@@ -113,7 +101,7 @@ public class DeliveryEntityService implements IDeliveryEntityService{
             }
             else if(userType.equals(UserType.DELIVERER)){
                 // If deliverer is assigned to the given box and at least one delivery is shipping, then return true.
-                return !deliveryRepository.findAllByBoxIdAndDelivererIdAndDeliveryStatus(
+                return !deliveryRepository.findAllByBoxIdAndDelivererEmailAndDeliveryStatus(
                         boxId,
                         rfId,
                         DeliveryStatus.SHIPPING
@@ -126,10 +114,10 @@ public class DeliveryEntityService implements IDeliveryEntityService{
 
     @Override
     public UserType getUserTypeByRfid(String rfId) {
-        if(!deliveryRepository.findAllByCustomerId(rfId).isEmpty()){
+        if(!deliveryRepository.findAllByCustomerEmail(rfId).isEmpty()){
             return UserType.CUSTOMER;
         }
-        else if(!deliveryRepository.findAllByDelivererId(rfId).isEmpty()){
+        else if(!deliveryRepository.findAllByDelivererEmail(rfId).isEmpty()){
             return UserType.DELIVERER;
         }
         return null;
@@ -137,9 +125,10 @@ public class DeliveryEntityService implements IDeliveryEntityService{
 
     @Override
     public void updateDeliveriesByLockRequest(String boxId, String rfId) throws IllegalAccessException {
+        // Note that rfid is equal to user email.
         UserType userType = getUserTypeByRfid(rfId);
         if(userType.equals(UserType.CUSTOMER)){
-            List<Delivery> deliveries = deliveryRepository.findAllByBoxIdAndCustomerIdAndDeliveryStatus(
+            List<Delivery> deliveries = deliveryRepository.findAllByBoxIdAndCustomerEmailAndDeliveryStatus(
                     boxId,
                     rfId,
                     DeliveryStatus.DELIVERED
@@ -151,7 +140,7 @@ public class DeliveryEntityService implements IDeliveryEntityService{
             }
         }
         else if(userType.equals(UserType.DELIVERER)){
-            List<Delivery> deliveries = deliveryRepository.findAllByBoxIdAndDelivererIdAndDeliveryStatus(
+            List<Delivery> deliveries = deliveryRepository.findAllByBoxIdAndDelivererEmailAndDeliveryStatus(
                     boxId,
                     rfId,
                     DeliveryStatus.SHIPPING
@@ -165,5 +154,6 @@ public class DeliveryEntityService implements IDeliveryEntityService{
         else{
             throw new IllegalAccessException();
         }
+        // TODO: Send email notifications for each delivery in deliveries list.
     }
 }

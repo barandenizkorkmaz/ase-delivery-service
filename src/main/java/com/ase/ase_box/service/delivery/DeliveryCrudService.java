@@ -1,9 +1,6 @@
 package com.ase.ase_box.service.delivery;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 
 import com.ase.ase_box.data.dto.DeliveryDto;
 import com.ase.ase_box.data.entity.Delivery;
@@ -15,7 +12,6 @@ import com.ase.ase_box.data.response.delivery.UpdateDeliveryResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import static com.ase.ase_box.data.mapper.BoxMapper.BOX_MAPPER;
 import static com.ase.ase_box.data.mapper.DeliveryMapper.DELIVERY_MAPPER;
 
 @Service
@@ -26,10 +22,8 @@ public class DeliveryCrudService implements IDeliveryCrudService{
     @Override
     public CreateDeliveryResponse createDelivery(CreateDeliveryRequest createDeliveryRequest) throws Exception {
         boolean isValid = deliveryEntityService.isCreateDeliveryValid(
-                IsCreateDeliveryValidRequest.builder()
-                        .boxId(createDeliveryRequest.getBoxId())
-                        .customerId(createDeliveryRequest.getCustomerId())
-                        .build()
+                createDeliveryRequest.getBoxId(),
+                createDeliveryRequest.getCustomerEmail()
         );
         if(isValid){
             deliveryEntityService.saveDelivery(createDeliveryRequest);
@@ -60,11 +54,8 @@ public class DeliveryCrudService implements IDeliveryCrudService{
     @Override
     public UpdateDeliveryResponse updateDelivery(String id, UpdateDeliveryRequest updateDeliveryRequest) throws Exception {
         boolean isValid = deliveryEntityService.isUpdateDeliveryValid(
-                id,
-                IsUpdateDeliveryValidRequest.builder()
-                        .boxId(updateDeliveryRequest.getBoxId())
-                        .customerId(updateDeliveryRequest.getCustomerId())
-                        .build()
+                updateDeliveryRequest.getBoxId(),
+                updateDeliveryRequest.getCustomerEmail()
         );
         if(isValid){
             Delivery delivery = deliveryEntityService.getDeliveryById(id)
@@ -113,10 +104,10 @@ public class DeliveryCrudService implements IDeliveryCrudService{
     }
 
     @Override
-    public void attemptDelivery(AttemptDeliveryRequest attemptDeliveryRequest) throws IllegalAccessException {
-        Delivery delivery = deliveryEntityService.getDeliveryById(attemptDeliveryRequest.getDeliveryId())
+    public void attemptDelivery(String id, AttemptDeliveryRequest attemptDeliveryRequest) throws IllegalAccessException {
+        Delivery delivery = deliveryEntityService.getDeliveryById(id)
                 .orElseThrow(IllegalArgumentException::new);
-        if(delivery.getDelivererId().equals(attemptDeliveryRequest.getCandidateDelivererId()) && delivery.getDeliveryStatus().equals(DeliveryStatus.DISPATCHED)){
+        if(delivery.getDelivererEmail().equals(attemptDeliveryRequest.getCandidateDelivererEmail()) && delivery.getDeliveryStatus().equals(DeliveryStatus.DISPATCHED)){
             delivery.setDeliveryStatus(DeliveryStatus.SHIPPING);
             deliveryEntityService.updateDelivery(delivery);
         }

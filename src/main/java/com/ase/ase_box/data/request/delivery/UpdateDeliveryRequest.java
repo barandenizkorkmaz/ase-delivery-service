@@ -16,9 +16,9 @@ import javax.persistence.Enumerated;
 public class UpdateDeliveryRequest {
     private String boxId;
 
-    private String delivererId;
+    private String delivererEmail;
 
-    private String customerId;
+    private String customerEmail;
 
     @Enumerated(EnumType.STRING)
     private DeliveryStatus deliveryStatus;
