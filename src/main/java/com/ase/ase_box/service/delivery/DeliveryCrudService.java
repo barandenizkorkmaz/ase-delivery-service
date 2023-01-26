@@ -104,8 +104,8 @@ public class DeliveryCrudService implements IDeliveryCrudService{
     }
 
     @Override
-    public void attemptDelivery(AttemptDeliveryRequest attemptDeliveryRequest) throws IllegalAccessException {
-        Delivery delivery = deliveryEntityService.getDeliveryById(attemptDeliveryRequest.getDeliveryId())
+    public void attemptDelivery(String id, AttemptDeliveryRequest attemptDeliveryRequest) throws IllegalAccessException {
+        Delivery delivery = deliveryEntityService.getDeliveryById(id)
                 .orElseThrow(IllegalArgumentException::new);
         if(delivery.getDelivererEmail().equals(attemptDeliveryRequest.getCandidateDelivererEmail()) && delivery.getDeliveryStatus().equals(DeliveryStatus.DISPATCHED)){
             delivery.setDeliveryStatus(DeliveryStatus.SHIPPING);

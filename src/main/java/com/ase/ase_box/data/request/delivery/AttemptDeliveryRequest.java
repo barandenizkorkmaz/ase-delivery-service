@@ -11,5 +11,4 @@ import lombok.NoArgsConstructor;
 @Builder
 public class AttemptDeliveryRequest {
     private String candidateDelivererEmail;
-    private String deliveryId;
 }

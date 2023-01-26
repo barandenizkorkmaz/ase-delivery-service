@@ -30,7 +30,7 @@ public interface IDeliveryCrudService {
 
     List<DeliveryDto> getPastDeliveriesByCustomerId(String customerId);
 
-    void attemptDelivery(AttemptDeliveryRequest attemptDeliveryRequest) throws IllegalAccessException;
+    void attemptDelivery(String id, AttemptDeliveryRequest attemptDeliveryRequest) throws IllegalAccessException;
 
 
 }

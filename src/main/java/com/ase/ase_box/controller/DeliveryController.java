@@ -84,10 +84,10 @@ public class DeliveryController {
         return ResponseEntity.ok(deliveryCrudService.getPastDeliveriesByCustomerId(customerId));
     }
 
-    @PostMapping("/attempt")   // TODO: 25.01.2023 Deliverer
-    public ResponseEntity<HttpStatus> attemptDelivery(@RequestBody AttemptDeliveryRequest attemptDeliveryRequest){
+    @PostMapping("/attempt/{id}")   // TODO: 25.01.2023 Deliverer
+    public ResponseEntity<HttpStatus> attemptDelivery(@PathVariable("id") String id, @RequestBody AttemptDeliveryRequest attemptDeliveryRequest){
         try{
-            deliveryCrudService.attemptDelivery(attemptDeliveryRequest);
+            deliveryCrudService.attemptDelivery(id, attemptDeliveryRequest);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (IllegalAccessException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
