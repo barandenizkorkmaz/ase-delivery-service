@@ -11,9 +11,9 @@ import com.ase.ase_box.service.delivery.DeliveryCrudService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.security.RolesAllowed;
 import java.util.List;
 
 @RequestMapping("/delivery")
@@ -29,7 +29,7 @@ public class DeliveryController {
     }
 
     @PostMapping("/create")  // TODO: 25.01.2023 Distpacher
-    @RolesAllowed("DISPATCHER")
+    @PreAuthorize("hasAuthority('DISPATCHER')")
     public ResponseEntity<CreateDeliveryResponse> createDelivery(@RequestBody CreateDeliveryRequest createDeliveryRequest){
         try {
             return ResponseEntity.ok(deliveryCrudService.createDelivery(createDeliveryRequest));
@@ -39,19 +39,19 @@ public class DeliveryController {
     }
 
     @GetMapping("/list/{id}")  // TODO: 25.01.2023 Distpacher
-    @RolesAllowed("DISPATCHER")
+    @PreAuthorize("hasAuthority('DISPATCHER')")
     public ResponseEntity<DeliveryDto> getDelivery(@PathVariable("id") String id){
         return ResponseEntity.ok(deliveryCrudService.getDelivery(id));
     }
 
     @GetMapping("/list/dispatcher/all")  // TODO: 25.01.2023 Distpacher
-    @RolesAllowed("DISPATCHER")
+    @PreAuthorize("hasAuthority('DISPATCHER')")
     public ResponseEntity<List<DeliveryDto>> getDeliveries(){
         return ResponseEntity.ok(deliveryCrudService.getDeliveries());
     }
 
     @PostMapping("/delete/{id}")  // TODO: 25.01.2023 Distpacher
-    @RolesAllowed("DISPATCHER")
+    @PreAuthorize("hasAuthority('DISPATCHER')")
     public ResponseEntity<DeleteDeliveryResponse> deleteDelivery(@PathVariable("id") String id){
         try{
             return ResponseEntity.ok(deliveryCrudService.deleteDelivery(id));
@@ -61,7 +61,7 @@ public class DeliveryController {
     }
 
     @PutMapping("/update/{id}")  // TODO: 25.01.2023 Distpacher
-    @RolesAllowed("DISPATCHER")
+    @PreAuthorize("hasAuthority('DISPATCHER')")
     public ResponseEntity<UpdateDeliveryResponse> updateDelivery(@PathVariable("id") String id, @RequestBody UpdateDeliveryRequest updateDeliveryRequest){
         try {
             return ResponseEntity.ok(deliveryCrudService.updateDelivery(id, updateDeliveryRequest));
@@ -71,31 +71,31 @@ public class DeliveryController {
     }
 
     @GetMapping("list/deliverer/{delivererId}")  // TODO: 25.01.2023 Delivere
-    @RolesAllowed("DELIVERER")
+    @PreAuthorize("hasAuthority('DELIVERER')")
     public ResponseEntity<List<DeliveryDto>> getDeliveriesByDeliverer(@PathVariable("delivererId") String delivererId){
         return ResponseEntity.ok(deliveryCrudService.getDeliveriesByDelivererId(delivererId));
     }
 
     @GetMapping("list/customer/all/{customerId}")  // TODO: 25.01.2023 Customer
-    @RolesAllowed("CUSTOMER")
+    @PreAuthorize("hasAuthority('CUSTOMER')")
     public ResponseEntity<List<DeliveryDto>> getDeliveriesByCustomer(@PathVariable("customerId") String customerId){
         return ResponseEntity.ok(deliveryCrudService.getDeliveriesByCustomerId(customerId));
     }
 
     @GetMapping("list/customer/active/{customerId}")  // TODO: 25.01.2023 Customer
-    @RolesAllowed("CUSTOMER")
+    @PreAuthorize("hasAuthority('CUSTOMER')")
     public ResponseEntity<List<DeliveryDto>> getActiveDeliveriesByCustomer(@PathVariable("customerId") String customerId){
         return ResponseEntity.ok(deliveryCrudService.getActiveDeliveriesByCustomerId(customerId));
     }
 
     @GetMapping("list/customer/past/{customerId}")  // TODO: 25.01.2023 Customer
-    @RolesAllowed("CUSTOMER")
+    @PreAuthorize("hasAuthority('CUSTOMER')")
     public ResponseEntity<List<DeliveryDto>> getPastDeliveriesByCustomer(@PathVariable("customerId") String customerId){
         return ResponseEntity.ok(deliveryCrudService.getPastDeliveriesByCustomerId(customerId));
     }
 
     @PostMapping("/attempt/{id}")   // TODO: 25.01.2023 Deliverer
-    @RolesAllowed("DELIVERER")
+    @PreAuthorize("hasAuthority('DELIVERER')")
     public ResponseEntity<HttpStatus> attemptDelivery(@PathVariable("id") String id, @RequestBody AttemptDeliveryRequest attemptDeliveryRequest){
         try{
             deliveryCrudService.attemptDelivery(id, attemptDeliveryRequest);
