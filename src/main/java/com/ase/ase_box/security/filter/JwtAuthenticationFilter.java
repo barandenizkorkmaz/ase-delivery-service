@@ -46,12 +46,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             if (jwtUtil.verifyJwtSignature(jwt)){
 
                 String username = jwtUtil.extractUsername(jwt);
-                System.out.println("username " + username);
                 Claims claims = jwtUtil.extractAllClaims(jwt);
-                System.out.println("claims " + claims);
-
                 Collection<Map<String,String>> roles = claims.get("roles", Collection.class);
-                System.out.println("roles " + roles);
 
                 List<GrantedAuthority> authorities = new ArrayList<>();
                 roles.forEach((role) -> {
@@ -59,17 +55,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 });
 
                 if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                    System.out.println("Inside if");
                     UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                             username,
                             "",
                             authorities
                     );
-                    System.out.println("Created authentication token");
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-                    System.out.println("Authentication set");
                     Authentication authContext = SecurityContextHolder.getContext().getAuthentication();
-                    System.out.println("Parsed authContext");
                     System.out.println(String.format("Authenticate Token Set:\n"
                                     + "Username: %s\n"
                                     + "Password: %s\n"
