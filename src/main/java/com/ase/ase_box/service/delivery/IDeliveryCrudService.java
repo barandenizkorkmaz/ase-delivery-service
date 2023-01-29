@@ -6,6 +6,7 @@ import com.ase.ase_box.data.request.delivery.CreateDeliveryRequest;
 import com.ase.ase_box.data.request.delivery.UpdateDeliveryRequest;
 import com.ase.ase_box.data.response.delivery.CreateDeliveryResponse;
 import com.ase.ase_box.data.response.delivery.DeleteDeliveryResponse;
+import com.ase.ase_box.data.response.delivery.GetDeliveriesResponse;
 import com.ase.ase_box.data.response.delivery.UpdateDeliveryResponse;
 
 import java.util.List;
@@ -20,11 +21,13 @@ public interface IDeliveryCrudService {
 
     DeliveryDto getDelivery(String deliveryId);
 
+    DeliveryDto getDeliveryForCustomer(String deliveryId);
+
     List<DeliveryDto> getDeliveries();
 
-    List<DeliveryDto> getDeliveriesByDelivererId(String delivererId);
+    List<GetDeliveriesResponse> getDeliveriesByDelivererId(String delivererId);
 
-    List<DeliveryDto> getDeliveriesByCustomerId(String customerId);
+    List<GetDeliveriesResponse> getDeliveriesByCustomerId(String customerId);
 
     List<DeliveryDto> getActiveDeliveriesByCustomerId(String customerId);
 

@@ -1,16 +1,21 @@
 package com.ase.ase_box.service.delivery;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.ase.ase_box.data.dto.DeliveryDto;
+import com.ase.ase_box.data.entity.Box;
 import com.ase.ase_box.data.entity.Delivery;
 import com.ase.ase_box.data.enums.DeliveryStatus;
 import com.ase.ase_box.data.request.delivery.*;
 import com.ase.ase_box.data.response.delivery.CreateDeliveryResponse;
 import com.ase.ase_box.data.response.delivery.DeleteDeliveryResponse;
+import com.ase.ase_box.data.response.delivery.GetDeliveriesResponse;
 import com.ase.ase_box.data.response.delivery.UpdateDeliveryResponse;
 import com.ase.ase_box.service.box.BoxEntityService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import static com.ase.ase_box.data.mapper.DeliveryMapper.DELIVERY_MAPPER;
@@ -84,18 +89,45 @@ public class DeliveryCrudService implements IDeliveryCrudService{
     }
 
     @Override
+    public DeliveryDto getDeliveryForCustomer(String deliveryId){
+        Delivery delivery = deliveryEntityService.getDeliveryById(deliveryId)
+                .orElseThrow(IllegalArgumentException::new);
+        Authentication authContext = SecurityContextHolder.getContext().getAuthentication();
+        if(delivery.getCustomerEmail().equals(authContext.getPrincipal().toString())){
+            return DELIVERY_MAPPER.convertToDeliveryDto(delivery);
+        }else{
+            throw new IllegalArgumentException();
+        }
+    }
+
+
+    @Override
     public List<DeliveryDto> getDeliveries() {
         return DELIVERY_MAPPER.convertToDeliveryDtoList(deliveryEntityService.getDeliveries());
     }
 
     @Override
-    public List<DeliveryDto> getDeliveriesByDelivererId(String delivererId) {
-        return DELIVERY_MAPPER.convertToDeliveryDtoList(deliveryEntityService.getDeliveriesByDelivererId(delivererId));
+    public List<GetDeliveriesResponse> getDeliveriesByDelivererId(String delivererId) {
+        List<Delivery> deliveries = deliveryEntityService.getDeliveriesByDelivererId(delivererId);
+        return convertDeliveryListToGetDeliveryResponseList(deliveries);
     }
 
     @Override
-    public List<DeliveryDto> getDeliveriesByCustomerId(String customerId) {
-        return DELIVERY_MAPPER.convertToDeliveryDtoList(deliveryEntityService.getDeliveriesByCustomerId(customerId));
+    public List<GetDeliveriesResponse> getDeliveriesByCustomerId(String customerId) {
+        List<Delivery> deliveries = deliveryEntityService.getDeliveriesByCustomerId(customerId);
+        return convertDeliveryListToGetDeliveryResponseList(deliveries);
+    }
+
+    private List<GetDeliveriesResponse> convertDeliveryListToGetDeliveryResponseList(List<Delivery> deliveries){
+        List<GetDeliveriesResponse> getDeliveriesResponses = new ArrayList<>();
+        for (Delivery delivery :
+                deliveries) {
+            Box box = boxEntityService.getBoxById(delivery.getBoxId()).orElseThrow(IllegalArgumentException::new);
+            GetDeliveriesResponse getDeliveriesResponse = DELIVERY_MAPPER.convertToGetDeliveryResponse(delivery);
+            getDeliveriesResponse.setBoxName(box.getName());
+            getDeliveriesResponses.add(getDeliveriesResponse);
+        }
+        return getDeliveriesResponses;
     }
 
     @Override

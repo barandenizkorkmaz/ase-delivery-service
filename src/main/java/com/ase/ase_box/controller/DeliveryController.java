@@ -1,17 +1,20 @@
 package com.ase.ase_box.controller;
 
 import com.ase.ase_box.data.dto.DeliveryDto;
+import com.ase.ase_box.data.entity.Delivery;
 import com.ase.ase_box.data.request.delivery.CreateDeliveryRequest;
 import com.ase.ase_box.data.request.delivery.AttemptDeliveryRequest;
 import com.ase.ase_box.data.request.delivery.UpdateDeliveryRequest;
 import com.ase.ase_box.data.response.delivery.CreateDeliveryResponse;
 import com.ase.ase_box.data.response.delivery.DeleteDeliveryResponse;
+import com.ase.ase_box.data.response.delivery.GetDeliveriesResponse;
 import com.ase.ase_box.data.response.delivery.UpdateDeliveryResponse;
 import com.ase.ase_box.service.delivery.DeliveryCrudService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -44,6 +47,13 @@ public class DeliveryController {
         return ResponseEntity.ok(deliveryCrudService.getDelivery(id));
     }
 
+    @GetMapping("{id}")
+    @PreAuthorize("hasAuthority('CUSTOMER')")
+    public ResponseEntity<String> getDeliveryById(@PathVariable("id") String id){
+        DeliveryDto deliveryDto = deliveryCrudService.getDeliveryForCustomer(id);
+        return ResponseEntity.ok(deliveryDto.getDeliveryStatus().name());
+    }
+
     @GetMapping("/list/dispatcher/all")  // TODO: 25.01.2023 Distpacher
     @PreAuthorize("hasAuthority('DISPATCHER')")
     public ResponseEntity<List<DeliveryDto>> getDeliveries(){
@@ -72,13 +82,13 @@ public class DeliveryController {
 
     @GetMapping("list/deliverer/{delivererId}")  // TODO: 25.01.2023 Delivere
     @PreAuthorize("hasAuthority('DELIVERER')")
-    public ResponseEntity<List<DeliveryDto>> getDeliveriesByDeliverer(@PathVariable("delivererId") String delivererId){
+    public ResponseEntity<List<GetDeliveriesResponse>> getDeliveriesByDeliverer(@PathVariable("delivererId") String delivererId){
         return ResponseEntity.ok(deliveryCrudService.getDeliveriesByDelivererId(delivererId));
     }
 
     @GetMapping("list/customer/all/{customerId}")  // TODO: 25.01.2023 Customer
     @PreAuthorize("hasAuthority('CUSTOMER')")
-    public ResponseEntity<List<DeliveryDto>> getDeliveriesByCustomer(@PathVariable("customerId") String customerId){
+    public ResponseEntity<List<GetDeliveriesResponse>> getDeliveriesByCustomer(@PathVariable("customerId") String customerId){
         return ResponseEntity.ok(deliveryCrudService.getDeliveriesByCustomerId(customerId));
     }
 
