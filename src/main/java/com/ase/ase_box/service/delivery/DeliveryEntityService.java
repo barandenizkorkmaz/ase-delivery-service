@@ -1,5 +1,6 @@
 package com.ase.ase_box.service.delivery;
 
+import com.ase.ase_box.data.entity.Box;
 import com.ase.ase_box.data.entity.Delivery;
 import com.ase.ase_box.data.enums.DeliveryStatus;
 import com.ase.ase_box.data.enums.UserType;

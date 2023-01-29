@@ -9,6 +9,7 @@ import com.ase.ase_box.data.request.delivery.*;
 import com.ase.ase_box.data.response.delivery.CreateDeliveryResponse;
 import com.ase.ase_box.data.response.delivery.DeleteDeliveryResponse;
 import com.ase.ase_box.data.response.delivery.UpdateDeliveryResponse;
+import com.ase.ase_box.service.box.BoxEntityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,13 +20,16 @@ import static com.ase.ase_box.data.mapper.DeliveryMapper.DELIVERY_MAPPER;
 public class DeliveryCrudService implements IDeliveryCrudService{
     private final DeliveryEntityService deliveryEntityService;
 
+    private final BoxEntityService boxEntityService;
+
     @Override
     public CreateDeliveryResponse createDelivery(CreateDeliveryRequest createDeliveryRequest) throws Exception {
+        boolean isBoxExists = boxEntityService.isBoxExists(createDeliveryRequest.getBoxId());
         boolean isValid = deliveryEntityService.isCreateDeliveryValid(
                 createDeliveryRequest.getBoxId(),
                 createDeliveryRequest.getCustomerEmail()
         );
-        if(isValid){
+        if(isBoxExists && isValid){
             deliveryEntityService.saveDelivery(createDeliveryRequest);
         }else{
             throw new Exception();
@@ -53,11 +57,12 @@ public class DeliveryCrudService implements IDeliveryCrudService{
 
     @Override
     public UpdateDeliveryResponse updateDelivery(String id, UpdateDeliveryRequest updateDeliveryRequest) throws Exception {
+        boolean isBoxExists = boxEntityService.isBoxExists(updateDeliveryRequest.getBoxId());
         boolean isValid = deliveryEntityService.isUpdateDeliveryValid(
                 updateDeliveryRequest.getBoxId(),
                 updateDeliveryRequest.getCustomerEmail()
         );
-        if(isValid){
+        if(isBoxExists && isValid){
             Delivery delivery = deliveryEntityService.getDeliveryById(id)
                     .orElseThrow(IllegalArgumentException::new);
             DELIVERY_MAPPER.updateDelivery(delivery, updateDeliveryRequest);

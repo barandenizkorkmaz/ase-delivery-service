@@ -38,5 +38,4 @@ public interface IDeliveryEntityService {
 
     void updateDeliveriesByLockRequest(String boxId, String rfId) throws IllegalAccessException;
 
-
 }
