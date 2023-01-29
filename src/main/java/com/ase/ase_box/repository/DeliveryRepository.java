@@ -19,4 +19,8 @@ public interface DeliveryRepository extends MongoRepository<Delivery,String> {
     List<Delivery> findAllByBoxIdAndDelivererEmailAndDeliveryStatus(String boxId, String delivererEmail, DeliveryStatus deliveryStatus);
 
     List<Delivery> findAllByCustomerEmailAndDeliveryStatusIn(String customerEmail, List<String> deliveryStatus);
+
+    List<Delivery> findAllByBoxIdAndDeliveryStatusNotLike(String boxId,DeliveryStatus deliveryStatus);
+
+    List<Delivery> findAllByBoxId(String boxId);
 }

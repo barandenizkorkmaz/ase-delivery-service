@@ -48,9 +48,14 @@ public class BoxCrudService implements IBoxCrudService {
     @Override
     public DeleteBoxResponse deleteBox(String id) throws Exception {
         boolean isSuccessful = false;
-        if(boxEntityService.isBoxExists(id)){
-            boxEntityService.deleteBoxById(id);
-            isSuccessful = true;
+        if(boxEntityService.isBoxExists(id) && deliveryEntityService.isDeliveryDeletableForBoxId(id)){
+            boolean responseFromDeliveryEntityService = deliveryEntityService.deleteAllDeliveryByBoxId(id);
+            if (responseFromDeliveryEntityService){
+                boxEntityService.deleteBoxById(id);
+                isSuccessful = true;
+            }else{
+                throw new Exception();
+            }
         }else{
             throw new Exception();
         }

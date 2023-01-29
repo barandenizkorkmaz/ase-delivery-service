@@ -26,6 +26,10 @@ public interface IDeliveryEntityService {
 
     boolean isDeliveryExists(String deliveryId);
 
+    boolean isDeliveryDeletableForBoxId(String boxId);
+
+    boolean deleteAllDeliveryByBoxId(String boxId);
+
     boolean isCreateDeliveryValid(String boxId, String customerEmail);
 
     boolean isUpdateDeliveryValid(String boxId, String customerEmail);

@@ -10,6 +10,7 @@ import com.ase.ase_box.repository.DeliveryRepository;
 import com.ase.ase_box.service.notification.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -126,6 +127,27 @@ public class DeliveryEntityService implements IDeliveryEntityService{
             return UserType.DELIVERER;
         }
         return null;
+    }
+
+    @Override
+    public boolean isDeliveryDeletableForBoxId(String boxId){
+        List<Delivery> deliveries = deliveryRepository.findAllByBoxIdAndDeliveryStatusNotLike(boxId,DeliveryStatus.COLLECTED);
+        return deliveries.size() == 0;
+    }
+
+    @Override
+    @Transactional
+    public boolean deleteAllDeliveryByBoxId(String boxId){
+        List<Delivery> deliveries = deliveryRepository.findAllByBoxId(boxId);
+        try {
+            for (Delivery delivery :
+                    deliveries) {
+                deliveryRepository.deleteById(delivery.getId());
+            }
+            return true;
+        }catch (Exception e){
+            return false;
+        }
     }
 
     @Override
