@@ -75,8 +75,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             else{
                 response.sendError(HttpStatus.BAD_REQUEST.value(), "Failed to Verify JWT Token");
             }
-        } else {
-            response.sendError(HttpStatus.BAD_REQUEST.value(), "No JWT Token Found");
         }
 
         filterChain.doFilter(request, response);
