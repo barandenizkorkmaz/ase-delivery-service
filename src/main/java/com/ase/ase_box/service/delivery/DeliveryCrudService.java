@@ -8,11 +8,13 @@ import com.ase.ase_box.data.entity.Box;
 import com.ase.ase_box.data.entity.Delivery;
 import com.ase.ase_box.data.enums.DeliveryStatus;
 import com.ase.ase_box.data.request.delivery.*;
+import com.ase.ase_box.data.request.notification.SendMailRequest;
 import com.ase.ase_box.data.response.delivery.CreateDeliveryResponse;
 import com.ase.ase_box.data.response.delivery.DeleteDeliveryResponse;
 import com.ase.ase_box.data.response.delivery.GetDeliveriesResponse;
 import com.ase.ase_box.data.response.delivery.UpdateDeliveryResponse;
 import com.ase.ase_box.service.box.BoxEntityService;
+import com.ase.ase_box.service.notification.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,7 +26,7 @@ import static com.ase.ase_box.data.mapper.DeliveryMapper.DELIVERY_MAPPER;
 @RequiredArgsConstructor
 public class DeliveryCrudService implements IDeliveryCrudService{
     private final DeliveryEntityService deliveryEntityService;
-
+    private final NotificationService notificationService;
     private final BoxEntityService boxEntityService;
 
     @Override
@@ -146,7 +148,13 @@ public class DeliveryCrudService implements IDeliveryCrudService{
                 .orElseThrow(IllegalArgumentException::new);
         if(delivery.getDelivererEmail().equals(attemptDeliveryRequest.getCandidateDelivererEmail()) && delivery.getDeliveryStatus().equals(DeliveryStatus.DISPATCHED)){
             delivery.setDeliveryStatus(DeliveryStatus.SHIPPING);
-            deliveryEntityService.updateDelivery(delivery);
+            Delivery responseFromDelivery = deliveryEntityService.updateDelivery(delivery);
+            notificationService.sendMail(
+                    SendMailRequest.builder()
+                            .content(responseFromDelivery.getDeliveryStatus().name() + "delivery track number: " + responseFromDelivery.getId())
+                            .receiver(delivery.getCustomerEmail())
+                            .build()
+            );
         }
         else {
             throw new IllegalAccessException();

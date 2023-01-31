@@ -29,7 +29,14 @@ public class DeliveryEntityService implements IDeliveryEntityService{
 
     @Override
     public Delivery saveDelivery(CreateDeliveryRequest createDeliveryRequest) {
-        return deliveryRepository.save(DELIVERY_MAPPER.createDelivery(createDeliveryRequest));
+        Delivery delivery =  deliveryRepository.save(DELIVERY_MAPPER.createDelivery(createDeliveryRequest));
+        notificationService.sendMail(
+                SendMailRequest.builder()
+                        .content(delivery.getDeliveryStatus().name() + "delivery track number: " + delivery.getId())
+                        .receiver(delivery.getCustomerEmail())
+                        .build()
+        );
+        return delivery;
     }
 
     @Override
@@ -185,7 +192,7 @@ public class DeliveryEntityService implements IDeliveryEntityService{
         for (Delivery delivery: deliveries) {
             notificationService.sendMail(
                     SendMailRequest.builder()
-                            .content(delivery.getDeliveryStatus().name())
+                            .content(delivery.getDeliveryStatus().name() + "delivery track number: " + delivery.getId())
                             .receiver(delivery.getCustomerEmail())
                             .build()
             );
